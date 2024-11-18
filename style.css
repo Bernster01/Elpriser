@@ -33,6 +33,7 @@ body{
     align-items: stretch;
     flex-wrap: wrap;
     height:765px;
+    margin: 0 auto;
 }
 #electricity_prices div{
     margin: 0.5rem 3.2rem;
@@ -74,7 +75,7 @@ body{
     border: 3.5px solid black;
 }
 .legend{
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: start;
