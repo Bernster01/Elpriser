@@ -102,6 +102,7 @@ async function main() {
         }
     } catch (error) {
         alert("Priserna finns inte tillgängliga för nästa dag. Försök igen senare.");
+        alert(error);
         return;
     }
 
