@@ -78,7 +78,9 @@ async function main() {
     appendElectricityPrice(electricity);
     setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice);
     //print to printer
-    window.print();
+    setTimeout(() => {
+        window.print();
+    }, 2000);
 }
 function appendElectricityPrice(electricity) {
     const container = document.getElementById("electricity_prices");
