@@ -78,7 +78,7 @@ async function main() {
     appendElectricityPrice(electricity);
     setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice);
     //print to printer
-    window.print();
+    // window.print();
 }
 function appendElectricityPrice(electricity) {
     const container = document.getElementById("electricity_prices");
@@ -93,7 +93,7 @@ function appendElectricityPrice(electricity) {
         container.appendChild(div);
     }
 }
-function setBackgroundColorForPrices(low, average, high) {
+async function setBackgroundColorForPrices(low, average, high) {
 
     const container = document.getElementById("electricity_prices");
     for (let i of container.children) {
@@ -104,7 +104,7 @@ function setBackgroundColorForPrices(low, average, high) {
         const diffLow = Math.abs(price - low);
         const diffAverage = Math.abs(price - average);
         const diffHigh = Math.abs(price - high);
-
+        const monthAverage = await getMonthAverage();
         // Set the background color based on the closest reference value
         if (diffLow <= diffAverage && diffLow <= diffHigh) {
             i.classList.add("low") // Low price
@@ -129,7 +129,49 @@ function setBackgroundColorForPrices(low, average, high) {
                 i.children[1].classList.add("highest_underline");
             }
         }
+        console.log(price,monthAverage);
+        console.log(price > monthAverage);
+        
+        if((price *1.1) > monthAverage){
+            i.classList.add("above_month_average");
+        }
+        else{
+            i.classList.add("below_month_average");
+        }
+        
 
+    }
+}
+async function getMonthAverage() {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
+    const year = date.getFullYear();
+    const days = Array.from({ length: date.getDate() }, (_, i) => String(i + 1).padStart(2, '0')); // Days with leading zero
+
+    let prices = [];
+
+    try {
+        const fetchPromises = days.map(day => {
+            const url = `https://www.elprisetjustnu.se/api/v1/prices/${year}/${month}-${day}_SE3.json`;
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    const prices = data.map(price => price.SEK_per_kWh * 1.25*100); // Convert to SEK/kWh and add VAT
+                    return prices.reduce((sum, price) => sum + price, 0) / prices.length; // Calculate average
+                }); 
+        });
+
+        prices = await Promise.all(fetchPromises); // Wait for all promises to resolve
+
+        const validPrices = prices.filter(price => price != null); // Filter out null/undefined prices
+        const average = validPrices.reduce((sum, price) => sum + price, 0) / validPrices.length;
+
+        return average;
+    } catch (error) {
+        console.error("Error fetching electricity prices:", error);
     }
 }
 main();
