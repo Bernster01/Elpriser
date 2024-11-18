@@ -93,6 +93,10 @@ body{
 .legend-item div{
     padding: 0.2rem;
 }
+
 @media print {
     head{display:none;}
+    .noPrint{
+        display:none;
+    }
 }

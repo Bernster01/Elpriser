@@ -1,6 +1,6 @@
-async function getElectricityPrice() {
+async function getElectricityPrice(date) {
     try {
-        const dates = getDate();
+        const dates = getDate(date);
         const url = `https://www.elprisetjustnu.se/api/v1/prices/${dates.year}/${dates.month}-${dates.day}_SE3.json`;
         console.log(url);
         return fetch(url)
@@ -14,10 +14,14 @@ async function getElectricityPrice() {
         return error;
     }
 }
-function getDate() {
-    //get the next day date
-    let date = new Date();
+function getDate(useDate) {
+    let date;
+    if(useDate){
+        date = new Date(useDate);
+    }else{
+    date = new Date();
     date.setDate(date.getDate() + 1);
+    }
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -48,8 +52,29 @@ function getLowestPrice(electricity) {
 }
 async function main() {
     let electricityPriceJson;
+    //check for get request in url
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('date');
+    let dates
+    if(myParam){
+        dates = getDate(myParam);
+    }
+    else{
+        dates = getDate();
+    }
+    document.getElementById("previous_day").href = `index.html?date=${dates.year}-${dates.month}-${dates.day - 1}`;
+    newDate = new Date(dates.year, dates.month-1, dates.day);
+    newDate.setDate(newDate.getDate() + 1);
+    newDate = getDate(newDate);
+    document.getElementById("next_day").href = `index.html?date=${newDate.year}-${newDate.month}-${newDate.day}`;
     try {
+        if(myParam){
+            electricityPriceJson = await getElectricityPrice(myParam);
+        }
+        else{
+
         electricityPriceJson = await getElectricityPrice();
+        }
     } catch (error) {
         alert("Priserna finns inte tillgängliga för nästa dag. Försök igen senare.");
         return;
@@ -67,7 +92,7 @@ async function main() {
         electricity.dates.push(`${hours}:00`);
     }
     console.log(electricity);
-    const dates = getDate();
+  
     document.getElementById("date_span").innerText = `${dates.year}-${dates.month}-${dates.day}`;
     const highestPrice = getHighestPrice(electricity);
     const averagePrice = getAveragePrice(electricity);
@@ -108,9 +133,10 @@ async function main() {
     if(highestPrice > 300){//breakpoint for high prices as butan gas is cheaper
         highest.parentElement.classList.add("danger");
     } 
+  
     //print to printer
     setTimeout(() => {
-        window.print();
+        // window.print();
     }, 2000);
 }
 function appendElectricityPrice(electricity) {
@@ -162,8 +188,6 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
                 i.children[1].classList.add("highest_underline");
             }
         }
-        console.log(price,monthAverage);
-        console.log(price > monthAverage);
         
         if((price *1.1) > monthAverage){
             i.classList.add("above_month_average");
