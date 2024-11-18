@@ -106,3 +106,29 @@ body{
         display:flex;
     }
 }
+@media screen and (max-width: 600px) {
+    .prices{
+    transform: scale(0.8);
+  }
+  .top div{
+    font-size: 0.8em;
+}
+   
+    
+}
+@media screen and (max-width: 400px) {
+    .prices{
+        
+      transform: scale(0.6);
+    }
+    .top div{
+        font-size: 0.6em;
+    }
+    #electricity_prices{
+        height: 500px;
+    }
+    #electricity_prices div{
+        margin: 0.25rem 0.75rem;
+        font-size: 0.6em;
+    }
+  }
