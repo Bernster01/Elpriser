@@ -70,6 +70,9 @@ body{
 .above_month_average{
     border:rgb(202, 0, 0) 3.5px dashed;
 }
+.danger{
+    border: 3.5px solid black;
+}
 @media print {
     head{display:none;}
 }

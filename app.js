@@ -140,7 +140,9 @@ async function setBackgroundColorForPrices(low, average, high) {
         else{
             i.classList.add("below_month_average");
         }
-        
+        if(price > 300){//breakpoint for high prices as butan gas is cheaper
+            i.classList.add("danger");
+        }
 
     }
 }
