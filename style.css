@@ -4,6 +4,7 @@ body{
     print-color-adjust:exact !important;
     font-family: 'Sour Gummy', sans-serif;
   }
+
 .prices{
     margin: 0 auto;
     display: flex;
