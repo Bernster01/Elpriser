@@ -107,9 +107,7 @@ body{
     }
 }
 @media screen and (max-width: 600px) {
-    .prices{
-    transform: scale(0.8);
-  }
+
   .top div{
     font-size: 0.8em;
 }
@@ -117,10 +115,7 @@ body{
     
 }
 @media screen and (max-width: 400px) {
-    .prices{
-        
-      transform: scale(0.6);
-    }
+
     .top div{
         font-size: 0.6em;
     }
