@@ -76,10 +76,41 @@ async function main() {
     document.getElementById("average").innerText = averagePrice;
     document.getElementById("lowest").innerText = lowestPrice;
     appendElectricityPrice(electricity);
-    setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice);
+    const monthAverage = await getMonthAverage();
+    setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice, monthAverage);
+    const lowest = document.getElementById("lowest")
+    const average = document.getElementById("average")
+    const highest = document.getElementById("highest")
+    if(lowestPrice*1.1 > monthAverage){
+        lowest.parentElement.classList.add("above_month_average");
+    }
+    else{
+        lowest.parentElement.classList.add("below_month_average");
+    }
+    if(averagePrice*1.1 > monthAverage){
+        average.parentElement.classList.add("above_month_average");
+    }
+    else{
+        average.parentElement.classList.add("below_month_average");
+    }
+    if(highestPrice*1.1 > monthAverage){
+        highest.parentElement.classList.add("above_month_average");
+    }
+    else{
+        highest.parentElement.classList.add("below_month_average");
+    }
+    if(lowestPrice > 300){//breakpoint for high prices as butan gas is cheaper
+        lowest.parentElement.classList.add("danger");
+    }
+    if(averagePrice > 300){//breakpoint for high prices as butan gas is cheaper
+        average.parentElement.classList.add("danger");
+    }
+    if(highestPrice > 300){//breakpoint for high prices as butan gas is cheaper
+        highest.parentElement.classList.add("danger");
+    } 
     //print to printer
     setTimeout(() => {
-        window.print();
+        // window.print();
     }, 2000);
 }
 function appendElectricityPrice(electricity) {
@@ -95,7 +126,7 @@ function appendElectricityPrice(electricity) {
         container.appendChild(div);
     }
 }
-async function setBackgroundColorForPrices(low, average, high) {
+async function setBackgroundColorForPrices(low, average, high, monthAverage) {
 
     const container = document.getElementById("electricity_prices");
     for (let i of container.children) {
@@ -106,7 +137,7 @@ async function setBackgroundColorForPrices(low, average, high) {
         const diffLow = Math.abs(price - low);
         const diffAverage = Math.abs(price - average);
         const diffHigh = Math.abs(price - high);
-        const monthAverage = await getMonthAverage();
+    
         // Set the background color based on the closest reference value
         if (diffLow <= diffAverage && diffLow <= diffHigh) {
             i.classList.add("low") // Low price

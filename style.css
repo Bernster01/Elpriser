@@ -73,6 +73,26 @@ body{
 .danger{
     border: 3.5px solid black;
 }
+.legend{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    margin: 0.5rem 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: scale(0.5) translate(80px,0);
+}
+.legend-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+.legend-item div{
+    padding: 0.2rem;
+}
 @media print {
     head{display:none;}
 }
