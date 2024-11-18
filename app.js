@@ -136,7 +136,7 @@ async function main() {
   
     //print to printer
     setTimeout(() => {
-        // window.print();
+        window.print();
     }, 2000);
 }
 function appendElectricityPrice(electricity) {

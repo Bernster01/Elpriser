@@ -74,7 +74,7 @@ body{
     border: 3.5px solid black;
 }
 .legend{
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: start;
@@ -98,5 +98,8 @@ body{
     head{display:none;}
     .noPrint{
         display:none;
+    }
+    .legend{
+        display:flex;
     }
 }
