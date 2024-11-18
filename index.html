@@ -19,22 +19,24 @@
             <div>
                 <a id="previous_day" class="noPrint" href="">Förra dagen</a>
                 <a id="next_day" class="noPrint" href="">Nästa dag</a>
-            </div>
+            </div><br>
+            <button id="print" class="noPrint" onclick="window.print()">Skriv ut</button><br>
+            <button class="noPrint"  onclick="changeAreaCode()">Byt elområde</button>
         </div> 
         <aside>
             <div class="legend">
                 <h2>Förklaringar</h2>
                 <div class="legend-item">
-                    <div class="low">
+                    <div class="low border_radius">
                         <p>Nära lägsta pris</p>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="medium">
+                    <div class="medium border_radius">
                         <p>Nära genomsnittligt pris</p></div>
                 </div>
                 <div class="legend-item">
-                    <div class="high">
+                    <div class="high border_radius">
                         <p>Nära högsta pris</p></div>
                 </div>
                 <div class="legend-item">
@@ -54,17 +56,17 @@
                         <p>Dagens högsta pris</p></div>
                 </div>
                 <div class="legend-item">
-                    <div class="above_month_average">
+                    <div class="above_month_averag border_radiuse">
                         <p>Över månadssnittet + 10%</p>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="below_month_average">
+                    <div class="below_month_average border_radius">
                         <p>Under månadssnittet</p>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="danger">
+                    <div class="danger border_radius">
                         <p>Billigare med gasol!</p>
                     </div>
                 </div>

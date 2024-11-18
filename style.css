@@ -74,7 +74,7 @@ body{
     border: 3.5px solid black;
 }
 .legend{
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: start;
@@ -93,10 +93,12 @@ body{
 .legend-item div{
     padding: 0.2rem;
 }
-
+.border_radius{
+    border-radius: 1rem;
+}
 @media print {
     head{display:none;}
-    .noPrint{
+    .noPrint,br{
         display:none;
     }
     .legend{

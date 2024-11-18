@@ -1,7 +1,8 @@
+let areaCode;
 async function getElectricityPrice(date) {
     try {
         const dates = getDate(date);
-        const url = `https://www.elprisetjustnu.se/api/v1/prices/${dates.year}/${dates.month}-${dates.day}_SE3.json`;
+        const url = `https://www.elprisetjustnu.se/api/v1/prices/${dates.year}/${dates.month}-${dates.day}_${areaCode}.json`;
         console.log(url);
         return fetch(url)
             .then(response => response.json())
@@ -34,7 +35,17 @@ function getDate(useDate) {
     }
     return { year, month, day };
 }
-
+function changeAreaCode() {
+    areaCode = prompt("Ange ditt elområde (SE1, SE2, SE3, SE4) för att få korrekta priser. Ditt elområde hittar du på din elräkning.");
+    if(areaCode === "SE1" || areaCode === "SE2" || areaCode === "SE3" || areaCode === "SE4"){
+        localStorage.setItem("areaCode", areaCode);
+        location.reload();
+    }
+    else{
+        alert("Områdesnumret är inte giltigt. Försök igen.");
+        changeAreaCode();
+    }
+}
 function getHighestPrice(electricity) {
     const prices = electricity.prices;
     const highestPrice = Math.max(...prices);
@@ -51,6 +62,20 @@ function getLowestPrice(electricity) {
     return lowestPrice;
 }
 async function main() {
+    //Check local storage for area code
+    areaCode = localStorage.getItem("areaCode");
+    if (!areaCode) {
+       areaCode = prompt("Ange ditt områdesnummer (SE1, SE2, SE3, SE4) för att få korrekta priser. Områdesnummer hittar du på din elräkning.");
+       //Check if area code is valid
+         if(areaCode === "SE1" || areaCode === "SE2" || areaCode === "SE3" || areaCode === "SE4"){
+            localStorage.setItem("areaCode", areaCode);
+         }
+        else{
+                alert("Områdesnumret är inte giltigt. Försök igen.");
+                location.reload();
+        }
+        
+    }
     let electricityPriceJson;
     //check for get request in url
     const urlParams = new URLSearchParams(window.location.search);
@@ -93,7 +118,7 @@ async function main() {
     }
     console.log(electricity);
   
-    document.getElementById("date_span").innerText = `${dates.year}-${dates.month}-${dates.day}`;
+    document.getElementById("date_span").innerText = `${dates.year}-${dates.month}-${dates.day} (${areaCode})`;
     const highestPrice = getHighestPrice(electricity);
     const averagePrice = getAveragePrice(electricity);
     const lowestPrice = getLowestPrice(electricity);
@@ -213,7 +238,7 @@ async function getMonthAverage() {
 
     try {
         const fetchPromises = days.map(day => {
-            const url = `https://www.elprisetjustnu.se/api/v1/prices/${year}/${month}-${day}_SE3.json`;
+            const url = `https://www.elprisetjustnu.se/api/v1/prices/${year}/${month}-${day}_${areaCode}.json`;
             return fetch(url)
                 .then(response => {
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
