@@ -135,9 +135,11 @@ async function main() {
     } 
   
     //print to printer
+    if(!myParam){
     setTimeout(() => {
         window.print();
     }, 2000);
+}
 }
 function appendElectricityPrice(electricity) {
     const container = document.getElementById("electricity_prices");
