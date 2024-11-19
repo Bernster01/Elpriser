@@ -62,6 +62,14 @@ function getLowestPrice(electricity) {
     return lowestPrice;
 }
 async function main() {
+    //Check for what browser is used
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+    if(isSafari){
+        alert("Utskrift fungerar inte lika bra i Safari. Använd Chrome eller Firefox för bästa resultat. Annars kan du behöva skala om sidan i förinställningarna innan du skriver ut.");
+    }
+
     //Check local storage for area code
     areaCode = localStorage.getItem("areaCode");
     if (!areaCode) {
