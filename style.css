@@ -174,12 +174,11 @@ body {
 @media screen and (max-width: 400px) {
 
     .top div {
-        font-size: 0.6em;
+        font-size: 0.7em;
     }
 
-    #electricity_prices div div {
-        font-size: 0.8em;
-
+    #left_column, #right_column {
+        width: calc(100%/2);
     }
 }
 
