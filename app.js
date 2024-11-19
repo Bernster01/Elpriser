@@ -1,4 +1,14 @@
 let areaCode;
+function print() {
+    if (window.confirm("Vill du skriva ut sidan?")) {
+        const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+        //Scale page to 90% for better printing in Safari
+        if (isSafari) {
+            document.body.style.zoom = "90%";
+        }
+        window.print();
+    }
+}
 async function getElectricityPrice(date) {
     try {
         const dates = getDate(date);
@@ -66,8 +76,8 @@ async function main() {
     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
     const isFirefox = /Firefox/.test(navigator.userAgent);
     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-    if(isSafari){
-        alert("Utskrift fungerar inte lika bra i Safari. Använd Chrome eller Firefox för bästa resultat. Annars kan du behöva skala om sidan i förinställningarna innan du skriver ut.");
+    if (isSafari) {
+        alert("Utskrift fungerar inte lika bra i Safari du behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
     }
 
     //Check local storage for area code
