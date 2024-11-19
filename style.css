@@ -1,130 +1,214 @@
 @import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
-body{
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-    font-family: 'Sour Gummy', sans-serif;
-  }
 
-.prices{
+body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-family: 'Sour Gummy', sans-serif;
+}
+
+.prices {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 470px;
 }
-.top{
+
+.top {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
-.top div{
-    margin: 0 10px;
+
+.top div {
     text-align: center;
+    width: calc(100% / 3);
 }
-.big{
+
+.big {
     font-size: 1.50em;
 
     padding: 0.25rem;
     border-radius: 1rem;
 }
-#electricity_prices{
+
+#electricity_prices {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: stretch;
+    align-content: space-between;
     flex-wrap: wrap;
-    height:765px;
-    margin: 0 auto;
+    width: 100%;
+    height: 765px;
 }
-#electricity_prices div{
-    margin: 0.5rem 1rem;
+
+#electricity_prices div {
+    margin: 0.5rem 0rem;
     text-align: center;
     font-size: 1.2em;
     border-radius: 1rem;
     padding: 0.40rem;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.low{
+
+.low {
     background-color: rgb(123, 245, 123);
-    
+
 }
-.medium{
+
+.medium {
     background-color: rgb(255, 205, 112);
 }
-.high{
+
+.high {
     background-color: #ff5757;
-    color:white;
+    color: white;
 }
-.highest_underline{
+
+.highest_underline {
     border-bottom: 5px solid rgba(190, 0, 0, 0.741);
 }
-.high_underline{
+
+.high_underline {
     border-bottom: 5px solid rgb(253, 127, 127);
 }
-.low_underline{
+
+.low_underline {
     border-bottom: 5px solid rgb(123, 245, 123);
 }
-.lowest_underline{
+
+.lowest_underline {
     border-bottom: 5px solid rgb(0, 210, 0);
 }
-.below_month_average{
-    border:rgb(0, 210, 0) 3.5px dashed;
+
+.below_month_average {
+    border: rgb(0, 210, 0) 3.5px dashed;
 }
-.above_month_average{
-    border:rgb(202, 0, 0) 3.5px dashed;
+
+.above_month_average {
+    border: rgb(202, 0, 0) 3.5px dashed;
 }
-.danger{
+
+.danger {
     border: 3.5px solid black;
 }
-.legend{
+
+.legend {
     display: none;
     flex-direction: column;
     justify-content: center;
-    align-items: start;
-    margin: 0.5rem 0;
+    align-items: stretch;
+    margin: 0.7rem 0;
     position: absolute;
     top: 0;
     right: 0;
-    transform: scale(0.5) translate(80px,0);
+    transform: scale(0.5) translate(100px, 0);
 }
-.legend-item{
+
+.legend-item {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0.5rem 0;
+    width: 100%;
 }
-.legend-item div{
+
+.legend-item div {
     padding: 0.2rem;
+    width: 100%;
+
+    text-align: center;
 }
-.border_radius{
+
+.border_radius {
     border-radius: 1rem;
 }
+
 @media print {
-    head{display:none;}
-    .noPrint,br{
-        display:none;
+    head {
+        display: none;
     }
-    .legend{
-        display:flex;
+
+    .noPrint,
+    br {
+        display: none;
+    }
+
+    .legend {
+        display: flex;
     }
 }
+
 @media screen and (max-width: 600px) {
 
-  .top div{
-    font-size: 0.8em;
+    .top div {
+        font-size: 1em;
+    }
+
+    #electricity_prices div {
+        padding: 0.4rem;
+    }
+
 }
-   
-    
+
+@media screen and (max-width: 480px) {
+
+
+    #electricity_prices div {
+        font-size: 1em;
+        padding: 0.5rem;
+    }
+
 }
+
 @media screen and (max-width: 400px) {
 
-    .top div{
+    .top div {
         font-size: 0.6em;
     }
-    #electricity_prices{
-        height: 500px;
+
+    #electricity_prices div {
+        font-size: 0.8em;
+        padding: 0.5rem;
+        margin: 0.6rem 0;
+
     }
-    #electricity_prices div{
-        margin: 0.25rem 0.75rem;
+}
+@media screen and (max-width: 350px) {
+
+   
+    #electricity_prices div {
+        font-size: 0.75em;
+
+    }
+}
+@media screen and (max-width: 300px) {
+
+   
+    #electricity_prices div {
+        font-size: 0.74em;
+
+    }
+}
+@media screen and (max-width: 295px) {
+
+   
+    #electricity_prices div {
+        font-size: 0.73em;
+
+    }
+}
+@media screen and (max-width: 295px) {
+
+   
+    #electricity_prices div {
         font-size: 0.6em;
+        margin: 0.7rem 0;
     }
-  }
+}

@@ -37,13 +37,13 @@ function getDate(useDate) {
 }
 function changeAreaCode() {
     areaCode = prompt("Ange ditt elområde (SE1, SE2, SE3, SE4) för att få korrekta priser. Ditt elområde hittar du på din elräkning.");
+    areaCode = areaCode.toUpperCase(); 
     if(areaCode === "SE1" || areaCode === "SE2" || areaCode === "SE3" || areaCode === "SE4"){
         localStorage.setItem("areaCode", areaCode);
         location.reload();
     }
     else{
         alert("Områdesnumret är inte giltigt. Försök igen.");
-        changeAreaCode();
     }
 }
 function getHighestPrice(electricity) {
@@ -132,19 +132,19 @@ async function main() {
     const lowest = document.getElementById("lowest")
     const average = document.getElementById("average")
     const highest = document.getElementById("highest")
-    if(lowestPrice*1.1 > monthAverage){
+    if(lowestPrice > monthAverage){
         lowest.parentElement.classList.add("above_month_average");
     }
     else{
         lowest.parentElement.classList.add("below_month_average");
     }
-    if(averagePrice*1.1 > monthAverage){
+    if(averagePrice > monthAverage){
         average.parentElement.classList.add("above_month_average");
     }
     else{
         average.parentElement.classList.add("below_month_average");
     }
-    if(highestPrice*1.1 > monthAverage){
+    if(highestPrice > monthAverage){
         highest.parentElement.classList.add("above_month_average");
     }
     else{
