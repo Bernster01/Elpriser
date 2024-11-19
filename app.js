@@ -1,5 +1,5 @@
 let areaCode;
-function print() {
+function printPage() {
     if (window.confirm("Vill du skriva ut sidan?")) {
         const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
         //Scale page to 90% for better printing in Safari
@@ -181,7 +181,7 @@ async function main() {
     //print to printer
     if (!myParam) {
         setTimeout(() => {
-            window.print();
+            printPage();
         }, 2000);
     }
 }
