@@ -76,8 +76,8 @@ async function main() {
     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
     const isFirefox = /Firefox/.test(navigator.userAgent);
     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-    if (isSafari) {
-        alert("Utskrift fungerar inte lika bra i Safari du behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
+    if (!isChrome) {
+        alert("Utskrift fungerar bäst i chrome. Du kan behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
     }
 
     //Check local storage for area code
