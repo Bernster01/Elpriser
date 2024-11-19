@@ -75,14 +75,7 @@ function getLowestPrice(electricity) {
     return lowestPrice;
 }
 async function main() {
-    //Check for what browser is used
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-    const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-    if (!isChrome) {
-        alert("Utskrift fungerar bäst i chrome. Du kan behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
-    }
-
+   
     //Check local storage for area code
     areaCode = localStorage.getItem("areaCode");
     if (!areaCode) {
@@ -101,6 +94,14 @@ async function main() {
     //check for get request in url
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get('date');
+     //Check for what browser is used
+     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+     const isFirefox = /Firefox/.test(navigator.userAgent);
+     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+     if (!isChrome && !myParam) {
+         alert("Utskrift fungerar bäst i chrome. Du kan behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
+     }
+ 
     let dates
     if (myParam) {
         dates = getDate(myParam);
@@ -108,6 +109,7 @@ async function main() {
     else {
         dates = getDate();
     }
+
     document.getElementById("previous_day").href = `index.html?date=${dates.year}-${dates.month}-${dates.day - 1}`;
     newDate = new Date(dates.year, dates.month - 1, dates.day);
     newDate.setDate(newDate.getDate() + 1);
