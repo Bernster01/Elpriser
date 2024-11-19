@@ -159,6 +159,9 @@ body {
 
 @media screen and (max-width: 480px) {
 
+    .top div {
+        font-size: 0.7em;
+    }
 
     #electricity_prices div div {
         font-size: 1em;
@@ -166,20 +169,12 @@ body {
         height: 1.7rem;
     }
     .prices{
-        max-width: 400px;
+        max-width: 300px;
     }
-
-}
-
-@media screen and (max-width: 400px) {
-
-    .top div {
-        font-size: 0.7em;
-    }
-
     #left_column, #right_column {
-        width: calc(100%/2);
+        width: calc(100%/2.2);
     }
+
 }
 
 @media screen and (max-width: 350px) {
@@ -190,17 +185,6 @@ body {
 
     #electricity_prices div div {
         font-size: 0.7em;
-
-    }
-}
-@media screen and (max-width: 300px) {
-
-    .top div {
-        font-size: 0.6em;
-    }
-
-    #electricity_prices div div {
-        font-size: 0.5em;
 
     }
 }
