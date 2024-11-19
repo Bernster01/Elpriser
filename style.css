@@ -146,6 +146,11 @@ body {
     .legend {
         display: flex;
     }
+    @page {
+        size: A4; /* Specify the page size */
+        margin: 1cm; /* Set margins */
+      }
+    
 }
 
 @media screen and (max-width: 700px) {
