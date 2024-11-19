@@ -1,13 +1,16 @@
 let areaCode;
 function printPage() {
-    if (window.confirm("Vill du skriva ut sidan?")) {
+    
         const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
         //Scale page to 90% for better printing in Safari
         if (isSafari) {
             document.body.style.zoom = "90%";
         }
         window.print();
-    }
+        //Reset zoom to 100% after printing
+        if (isSafari) {
+            document.body.style.zoom = "100%";
+        }
 }
 async function getElectricityPrice(date) {
     try {
