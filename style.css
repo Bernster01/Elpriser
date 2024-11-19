@@ -33,25 +33,27 @@ body {
     padding: 0.25rem;
     border-radius: 1rem;
 }
-
 #electricity_prices {
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: stretch;
-    align-content: space-between;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    height: 765px;
+    margin: 0.5rem 0;
 }
-
-#electricity_prices div {
-    margin: 0.5rem 0rem;
+#left_column, #right_column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: calc(100%/3);
+}
+#electricity_prices div div {
     text-align: center;
     font-size: 1.2em;
     border-radius: 1rem;
     padding: 0.40rem;
-    width: 30%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -151,18 +153,14 @@ body {
         font-size: 1em;
     }
 
-    #electricity_prices div {
-        padding: 0.4rem;
-    }
 
 }
 
 @media screen and (max-width: 480px) {
 
 
-    #electricity_prices div {
+    #electricity_prices div div {
         font-size: 1em;
-        padding: 0.5rem;
     }
 
 }
@@ -173,42 +171,31 @@ body {
         font-size: 0.6em;
     }
 
-    #electricity_prices div {
+    #electricity_prices div div {
         font-size: 0.8em;
-        padding: 0.5rem;
-        margin: 0.6rem 0;
 
     }
 }
+
 @media screen and (max-width: 350px) {
 
-   
-    #electricity_prices div {
-        font-size: 0.75em;
+    .top div {
+        font-size: 0.6em;
+    }
+
+    #electricity_prices div div {
+        font-size: 0.7em;
 
     }
 }
 @media screen and (max-width: 300px) {
 
-   
-    #electricity_prices div {
-        font-size: 0.74em;
-
-    }
-}
-@media screen and (max-width: 295px) {
-
-   
-    #electricity_prices div {
-        font-size: 0.73em;
-
-    }
-}
-@media screen and (max-width: 295px) {
-
-   
-    #electricity_prices div {
+    .top div {
         font-size: 0.6em;
-        margin: 0.7rem 0;
+    }
+
+    #electricity_prices div div {
+        font-size: 0.5em;
+
     }
 }
