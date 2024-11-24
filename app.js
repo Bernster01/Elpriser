@@ -194,12 +194,13 @@ function appendElectricityPrice(electricity) {
     const container1 = document.getElementById("left_column");
     const container2 = document.getElementById("right_column");
     let counter = 0;
-    for (let i of electricity.prices) {
+    for (let i in electricity.prices) {
         const div = document.createElement("div");
         const time = document.createElement("span");
         const price = document.createElement("span");
-        time.innerText = electricity.dates[electricity.prices.indexOf(i)] + ": ";
-        price.innerText = i + " öre";
+        console.log(i);
+        time.innerText = electricity.dates[i] + ": ";
+        price.innerText = electricity.prices[i] + " öre";
         div.appendChild(time);
         div.appendChild(price);
         if (counter < 12) {
