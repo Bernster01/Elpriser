@@ -109,12 +109,17 @@ async function main() {
     else {
         dates = getDate();
     }
-
-    document.getElementById("previous_day").href = `index.html?date=${dates.year}-${dates.month}-${dates.day - 1}`;
+    const yesterday = new Date(dates.year, dates.month - 1, dates.day);
+    yesterday.setDate(yesterday.getDate() - 1);
+    // document.getElementById("previous_day").href = `index.html?date=${yesterday}-${yesterday.month}-${yesterday.day}`;
+    document.getElementById("previous_day").href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
     newDate = new Date(dates.year, dates.month - 1, dates.day);
-    newDate.setDate(newDate.getDate() + 1);
+  
     newDate = getDate(newDate);
-    document.getElementById("next_day").href = `index.html?date=${newDate.year}-${newDate.month}-${newDate.day}`;
+    const tomorrow = new Date(newDate.year, newDate.month - 1, newDate.day);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    // document.getElementById("next_day").href = `index.html?date=${tomorrow}-${tomorrow.month}-${tomorrow.day}`;
+    document.getElementById("next_day").href = `index.html?date=${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}`;
     try {
         if (myParam) {
             electricityPriceJson = await getElectricityPrice(myParam);
@@ -150,7 +155,9 @@ async function main() {
     document.getElementById("average").innerText = averagePrice;
     document.getElementById("lowest").innerText = lowestPrice;
     appendElectricityPrice(electricity);
-    const monthAverage = await getMonthAverage();
+    //go back one day to get the average price for the month
+    const aDate = new Date(dates.year, dates.month - 1, dates.day);
+    const monthAverage = await getMonthAverage(aDate);
     setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice, monthAverage);
     const lowest = document.getElementById("lowest")
     const average = document.getElementById("average")
@@ -307,13 +314,12 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
 
     }
 }
-async function getMonthAverage() {
-    const date = new Date();
-    date.setDate(date.getDate() + 1);
+async function getMonthAverage(startDate) {
+    const date = startDate ? new Date(startDate) : new Date();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
     const year = date.getFullYear();
     const days = Array.from({ length: date.getDate() }, (_, i) => String(i + 1).padStart(2, '0')); // Days with leading zero
-
+    console.log(startDate);
     let prices = [];
     try {
         const fetchPromises = days.map(day => {
