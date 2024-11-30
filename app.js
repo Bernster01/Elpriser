@@ -309,12 +309,12 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
 }
 async function getMonthAverage() {
     const date = new Date();
+    date.setDate(date.getDate() + 1);
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
     const year = date.getFullYear();
     const days = Array.from({ length: date.getDate() }, (_, i) => String(i + 1).padStart(2, '0')); // Days with leading zero
 
     let prices = [];
-
     try {
         const fetchPromises = days.map(day => {
             const url = `https://www.elprisetjustnu.se/api/v1/prices/${year}/${month}-${day}_${areaCode}.json`;
