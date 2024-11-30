@@ -302,7 +302,7 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
             }
         }
 
-        if ((price * 1.1) > monthAverage) {
+        if ((price) > monthAverage) {
             i.classList.add("above_month_average");
         }
         else {
