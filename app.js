@@ -112,14 +112,24 @@ async function main() {
     const yesterday = new Date(dates.year, dates.month - 1, dates.day);
     yesterday.setDate(yesterday.getDate() - 1);
     // document.getElementById("previous_day").href = `index.html?date=${yesterday}-${yesterday.month}-${yesterday.day}`;
-    document.getElementById("previous_day").href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+    let yesterdayDay = yesterday.getDate();
+    //Add leading zero if day is less than 10
+    if (yesterdayDay < 10) {
+        yesterdayDay = `0${yesterdayDay}`;
+    }
+    document.getElementById("previous_day").href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterdayDay}`;
     newDate = new Date(dates.year, dates.month - 1, dates.day);
   
     newDate = getDate(newDate);
     const tomorrow = new Date(newDate.year, newDate.month - 1, newDate.day);
     tomorrow.setDate(tomorrow.getDate() + 1);
+    let tomorrowDay = tomorrow.getDate();
+    //Add leading zero if day is less than 10
+    if (tomorrowDay < 10) {
+        tomorrowDay = `0${tomorrowDay}`;
+    }
     // document.getElementById("next_day").href = `index.html?date=${tomorrow}-${tomorrow.month}-${tomorrow.day}`;
-    document.getElementById("next_day").href = `index.html?date=${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}`;
+    document.getElementById("next_day").href = `index.html?date=${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrowDay}`;
     try {
         if (myParam) {
             electricityPriceJson = await getElectricityPrice(myParam);
