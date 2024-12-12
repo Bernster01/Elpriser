@@ -21,7 +21,6 @@ async function getElectricityPrice(date) {
     try {
         const dates = getDate(date);
         const url = `https://www.elprisetjustnu.se/api/v1/prices/${dates.year}/${dates.month}-${dates.day}_${areaCode}.json`;
-        console.log(url);
         return fetch(url)
             .then(response => response.json())
             .then(data => data)
@@ -106,7 +105,6 @@ async function main() {
     }
     if (!areaCode) {
         areaCode = prompt("Ange ditt elområde (SE1, SE2, SE3, SE4) för att få korrekta priser. Ditt elområde hittar du på din elräkning.");
-        console.log(areaCode);
         if (areaCode === null) {
             confirm("Du måste ange ett område för att kunna se elpriserna.");
             location.reload();
@@ -142,11 +140,9 @@ async function main() {
         }
     }
     else {
-        console.log("no tax");
         shouldTax = true;
         localStorage.setItem("withTax", shouldTax);
     }
-    console.log(withTax);
     let electricityPriceJson;
     //check for get request in url
     const urlParams = new URLSearchParams(window.location.search);
@@ -299,7 +295,6 @@ async function main() {
     const container1 = document.getElementById("left_column");
     const container2 = document.getElementById("right_column");
     for (let i of container1.children) {
-        console.log(i.children[0].innerText);
         if (times.includes(i.children[0].innerText)) {
             i.classList.add("shower");
         }
@@ -320,16 +315,21 @@ async function main() {
    
     // Add current hour class to the current hour
     const isToday = new Date(dates.year, dates.month - 1, dates.day).toDateString() === new Date().toDateString();
-    console.log(isToday);
     if (isToday) {
         let currentHour = new Date().getHours();
-        document.getElementById(currentHour + ":00").classList.add("current_hour");
         if (Number(currentHour) >= 12) {
+            if(Number(currentHour) === 0){
+                currentHour = "00";
+            }
             document.getElementById(currentHour + ":00").classList.add("current_hour_right");
         }
         else {
+            if(Number(currentHour) === 0){
+                currentHour = "00";
+            }
             document.getElementById(currentHour + ":00").classList.add("current_hour_left");
         }
+        document.getElementById(currentHour + ":00").classList.add("current_hour");
     }
 }
 function appendElectricityPrice(electricity) {
@@ -342,7 +342,6 @@ function appendElectricityPrice(electricity) {
         div.id = electricity.dates[i];
         const time = document.createElement("span");
         const price = document.createElement("span");
-        console.log(i);
         time.innerText = electricity.dates[i] + ": ";
         price.innerText = electricity.prices[i] + " öre";
         div.appendChild(time);
@@ -460,7 +459,6 @@ async function getMonthAverage(startDate) {
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
     const year = date.getFullYear();
     const days = Array.from({ length: date.getDate() }, (_, i) => String(i + 1).padStart(2, '0')); // Days with leading zero
-    console.log(startDate);
     let prices = [];
     try {
         const fetchPromises = days.map(day => {
