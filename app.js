@@ -3,6 +3,7 @@ let shouldPrint;
 let withTax = true;
 let view = "normal";
 let elData;
+let urlDate;
 function printPage() {
 
     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
@@ -165,7 +166,7 @@ async function main() {
     else {
         dates = getDate();
     }
-
+    urlDate = new Date(dates.year, dates.month - 1, dates.day);
     //Update the date input field
     document.getElementById("date").value = `${dates.year}-${dates.month}-${dates.day}`;
     document.getElementById("date").addEventListener("change", (e) => {
@@ -315,11 +316,19 @@ async function main() {
     else {
         changeToNormal();
     }
-    //print to printer
-    if (!myParam && shouldPrint === "true") {
-        setTimeout(() => {
-            printPage();
-        }, 2000);
+   
+    // Add current hour class to the current hour
+    const isToday = new Date(dates.year, dates.month - 1, dates.day).toDateString() === new Date().toDateString();
+    console.log(isToday);
+    if (isToday) {
+        let currentHour = new Date().getHours();
+        document.getElementById(currentHour + ":00").classList.add("current_hour");
+        if (Number(currentHour) >= 12) {
+            document.getElementById(currentHour + ":00").classList.add("current_hour_right");
+        }
+        else {
+            document.getElementById(currentHour + ":00").classList.add("current_hour_left");
+        }
     }
 }
 function appendElectricityPrice(electricity) {
@@ -328,6 +337,8 @@ function appendElectricityPrice(electricity) {
     let counter = 0;
     for (let i in electricity.prices) {
         const div = document.createElement("div");
+        //Set id to time
+        div.id = electricity.dates[i];
         const time = document.createElement("span");
         const price = document.createElement("span");
         console.log(i);
@@ -540,6 +551,8 @@ function changeToNormal() {
 function createGraph() {
     const canvas = document.getElementById("electricity_chart");
     const ctx = canvas.getContext("2d");
+    const canvas2 = document.getElementById("electricity_chart_print");
+    const ctx2 = canvas2.getContext("2d");
     let graphData = { labels: [], datasets: [] };
     //With chart.js
     const dataValues = elData.prices;
@@ -550,19 +563,31 @@ function createGraph() {
     const middleColor = "rgb(255, 205, 112)";
     const endColor = "rgb(255, 87, 87)";
     const gradientColors = dataValues.map(value => calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor));
+    const isToday = urlDate.toDateString() === new Date().toDateString();
+    const anno = isToday ?[
+        {
+            type: 'line',
+            // xMin: "14:00", // Current time as a label
+            // xMax: "14:00",
+            xMin: new Date().getHours(),
+            xMax: new Date().getHours(),
+            borderColor: 'black',  // Line color
+            borderWidth: 3,
+            label: {
+                display: true,
+                content: 'Nuvarande timme', // Title text for the annotation
+                position: 'start', // Position of the label ('start', 'center', or 'end')
+                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color for the label
+                color: 'white', // Text color
+                font: {
+                    size: 12, // Font size for the label
+                    weight: 'bold' // Font weight for the label
+                },
+                padding: 5 // Padding around the label
 
-    // const lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    // dataValues.forEach((_, index) => {
-    //     const stopPosition = index / (dataValues.length - 1); // Calculate stop position (0 to 1)
-    //     lineGradient.addColorStop(Math.min(stopPosition,1), gradientColors[index]);
-    // });
-
-    // Define the custom plugin
-    const calculateSegmentColor = (value1, value2) => {
-        const gradientColor1 = calculateGradientColor(value1, lowest, highest, startColor, middleColor, endColor);
-        const gradientColor2 = calculateGradientColor(value2, lowest, highest, startColor, middleColor, endColor);
-        return { gradientColor1, gradientColor2 };
-    };
+            }
+        }
+    ] : [];
     try {
         const myChart = new Chart(ctx, {
             type: 'line',
@@ -579,28 +604,103 @@ function createGraph() {
                     tension: 0,
                     fill: true,
                     spanGaps: true, // Allow styling gaps
-                    // segment: {
-                    //     borderColor: (ctx) => {
-                    //         const { p0DataIndex, p1DataIndex } = ctx; // Access the two points defining the segment
-                    //         const value1 = dataValues[p0DataIndex];
-                    //         const value2 = dataValues[p1DataIndex];
+                    segment: {
+                        borderColor: (ctx) => {
+                            const { p0DataIndex, p1DataIndex } = ctx; // Access the two points defining the segment
+                            return gradientColors[p0DataIndex];
+                        },
+                        backgroundColor: (ctx) => {
+                            const { p0DataIndex } = ctx;
+                            return gradientColors[p0DataIndex];
+                        }
+                    }
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 18, // Set font size for Y-axis ticks
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'öre/kWh',
+                            font: {
+                                size: 14 // Set font size for X-axis title
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 15, // Set font size for X-axis ticks
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tid',
+                            font: {
+                                size: 14 // Set font size for X-axis title
+                            }
+                        }
+                    }
+                },
 
-                    //         const { gradientColor1, gradientColor2 } = calculateSegmentColor(value1, value2);
+                plugins: {
+                    legend: {
+                        display: false, // Hide legend completely
+                        labels: {
+                            font: {
+                                size: 18 // Set font size for legend (if visible)
+                            }
+                        }
+                    },
+                    tooltip: {
+                        titleFont: {
+                            size: 18 // Set tooltip title font size
+                        },
+                        bodyFont: {
+                            size: 16 // Set tooltip body font size
+                        },
+                        displayColors: false, // Hide color boxes in tooltip
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = tooltipItem.raw; // Get the value of the hovered data point
+                                return value + " " + "öre/kWh"; // Append the custom string to the value
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: anno
+                    }
+                },
 
-                    //         // Return the gradient between the two points
-                    //         const gradient = ctx.chart.ctx.createLinearGradient(
-                    //             ctx.p0.x, 0, ctx.p1.x, 0
-                    //         );
-                    //         gradient.addColorStop(0, gradientColor1);
-                    //         gradient.addColorStop(1, gradientColor2);
-                    //         return gradient;
-                    //     },
-                    //     backgroundColor: (ctx) => {
-                    //         const { p0DataIndex } = ctx;
-                    //         const value = dataValues[p0DataIndex];
-                    //         return calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor);
-                    //     }
-                    // }
+            },
+
+
+
+        });
+
+        const myChartPrint = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: [...elData.dates],
+                datasets: [{
+                    data: dataValues,
+                    borderColor: gradientColors,
+                    borderWidth: 2,
+                    pointBackgroundColor: gradientColors,
+                    pointRadius: 5,
+                    stepped: true,
+                    pointBorderColor: "#000",
+                    tension: 0,
+                    fill: true,
+                    spanGaps: true, // Allow styling gaps
                     segment: {
                         borderColor: (ctx) => {
                             const { p0DataIndex, p1DataIndex } = ctx; // Access the two points defining the segment
@@ -676,10 +776,11 @@ function createGraph() {
             }
         });
 
-
         //Set the canvas to be the same size as the container
         canvas.style.width = '90%';
         canvas.style.height = '90%';
+        canvas2.style.width = '90%';
+        canvas2.style.height = '90%';
     } catch (error) {
         // console.error(error);
     }
