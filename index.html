@@ -1,78 +1,125 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Elpriset</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    </head>
-    <body>
-        <div class="prices">
-            <h2>Elpris för <span id="date_span"></span> inkl. moms</h2>
-            <div class="top">
-                <div><p>Lägsta</p><p class="big low"><span id="lowest"></span> öre</p></div>
-                <div><p>Genomsnitt</p><p class="big medium"><span id="average"></span> öre</p></div>
-                <div><p>Högsta</p><p class="big high"><span id="highest"></span> öre</p></div>
-            </div>
-            <div id="electricity_prices">
-                <div id="left_column"></div>
-                <div id="right_column"></div>
+
+<head>
+    <title>Elpriset</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+    <header class="noPrint">
+        <h1>Elpriset</h1>
+    </header>
+    <main class="prices">
+        <h2>Elpris för <span id="date_span"></span> inkl. moms</h2>
+        <div class="top">
+            <div>
+                <p>Lägsta</p>
+                <p class="big low"><span id="lowest"></span> öre</p>
             </div>
             <div>
-                <a id="previous_day" class="noPrint" href="">&lt;--</a>
-                <a id="next_day" class="noPrint" href="">--&gt;</a>
-            </div><br>
-            <button id="print" class="noPrint" onclick="printPage()">Skriv ut</button><br>
-            <button class="noPrint"  onclick="changeAreaCode()">Byt elområde</button>
-        </div> 
-        <aside>
-            <div class="legend">
-                <h2>Förklaringar</h2>
-                <div class="legend-item">
-                    <div class="low border_radius">
-                        <p>Nära lägsta pris</p>
-                    </div>
-                </div>
-                <div class="legend-item">
-                    <div class="medium border_radius">
-                        <p>Nära genomsnittligt pris</p></div>
-                </div>
-                <div class="legend-item">
-                    <div class="high border_radius">
-                        <p>Nära högsta pris</p></div>
-                </div>
-                <div class="legend-item">
-                    <div class="low_underline">
-                        <p>Under genomsnitt</p></div>
-                </div>
-                <div class="legend-item">
-                    <div class="high_underline">
-                        <p>Över genomsnitt</p></div>
-                </div>
-                <div class="legend-item">
-                    <div class="lowest_underline">
-                        <p>Dagens lägsta pris</p></div>
-                </div>
-                <div class="legend-item">
-                    <div class="highest_underline">
-                        <p>Dagens högsta pris</p></div>
-                </div>
-                <div class="legend-item">
-                    <div class="above_month_average border_radius">
-                        <p>Över månadsgenomsnittet</p>
-                    </div>
-                </div>
-                <div class="legend-item">
-                    <div class="below_month_average border_radius">
-                        <p>Under månadsgenomsnittet</p>
-                    </div>
-                </div>
-                <div class="legend-item">
-                    <div class="danger border_radius">
-                        <p>Billigare med gasol!</p>
-                    </div>
+                <p>Genomsnitt</p>
+                <p class="big medium"><span id="average"></span> öre</p>
+            </div>
+            <div>
+                <p>Högsta</p>
+                <p class="big high"><span id="highest"></span> öre</p>
+            </div>
+        </div>
+        <div id="electricity_prices">
+            <div id="left_column"></div>
+            <div id="middle_column">
+                <div id="month_average_container">
+                    <p>
+                        Månads-genomsnittet
+                    </p>
+                    <p span id="time_range">
+
+                    </p>
+                    <p id="month_average">
+
+                    </p>
                 </div>
             </div>
-        </aside>
-    </body>
-    <script src="app.js"></script>
+            <div id="right_column"></div>
+        </div>
+        <div class="nav">
+            <a id="previous_day" class="noPrint" href="">
+                <img src="l.svg" alt="arrow"></a>
+            <div></div>
+            <a id="next_day" class="noPrint" href="">
+                <img src="r.svg" alt="arrow"></a>
+        </div><br>
+        <button id="print" class="noPrint button" onclick="printPage()">Skriv ut</button><br>
+        <button class="noPrint button" onclick="changeAreaCode()">Byt elområde</button>
+    </main>
+    <aside>
+        <div class="legend">
+            <h2>Förklaringar</h2>
+            <div class="legend-item">
+                <div class="low border_radius">
+                    <p>Nära lägsta pris</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="medium border_radius">
+                    <p>Nära genomsnittligt pris</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="high border_radius">
+                    <p>Nära högsta pris</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="low_underline">
+                    <p>Under genomsnitt</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="high_underline">
+                    <p>Över genomsnitt</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="lowest_underline">
+                    <p>Dagens lägsta pris</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="highest_underline">
+                    <p>Dagens högsta pris</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="above_month_average border_radius">
+                    <p>Över månadsgenomsnittet</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="below_month_average border_radius">
+                    <p>Under månadsgenomsnittet</p>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="danger border_radius">
+                    <p>Billigare med gasol!</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <footer class="noPrint">
+        <p>Elpriset hämtas från <a href="https://www.elprisetjustnu.se">elprisetjustnu.nu</a>
+        </p>
+        <p id="copyright">
+            © <script>
+                document.write(new Date().getFullYear());
+            </script>
+            Casper Berneklint
+        </p>
+    </footer>
+</body>
+<script src="app.js"></script>
+
 </html>

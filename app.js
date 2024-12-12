@@ -168,8 +168,6 @@ async function main() {
         }
         electricity.dates.push(`${hours}:00`);
     }
-    console.log(electricity);
-
     document.getElementById("date_span").innerText = `${dates.year}-${dates.month}-${dates.day} (${areaCode})`;
     const highestPrice = getHighestPrice(electricity);
     const averagePrice = getAveragePrice(electricity);
@@ -181,6 +179,10 @@ async function main() {
     //go back one day to get the average price for the month
     const aDate = new Date(dates.year, dates.month - 1, dates.day);
     const monthAverage = await getMonthAverage(aDate);
+    const startMonthDate = new Date(dates.year, dates.month - 1, 1);
+    const today = new Date();
+    document.getElementById("time_range").innerText = `${startMonthDate.getMonth() + 1}/${startMonthDate.getDate()} - ${today.getMonth() + 1}/${today.getDate()}`;
+    document.getElementById("month_average").innerText = monthAverage.toFixed(2) + " öre/kWh";	
     setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice, monthAverage);
     const lowest = document.getElementById("lowest")
     const average = document.getElementById("average")
@@ -287,7 +289,7 @@ function setColor(low,average,high,monthAverage,container){
         gradient = Math.max(0, Math.min(1, gradient)); // Clamp the gradient between 0 and 1
 
         let color;
-        if (gradient <= 0.5) {
+        if (gradient <= 0.25) {
             // Interpolate between start and middle
             const localGradient = gradient / 0.5; // Scale to range [0, 1]
             color = `rgb(
