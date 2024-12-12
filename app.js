@@ -193,6 +193,7 @@ async function main() {
     const tomorrow = new Date(newDate.year, newDate.month - 1, newDate.day);
     tomorrow.setDate(tomorrow.getDate() + 1);
     let tomorrowDay = tomorrow.getDate();
+    document.getElementById("copy_year").innerText = new Date().getFullYear();
     //Add leading zero if day is less than 10
     if (tomorrowDay < 10) {
         tomorrowDay = `0${tomorrowDay}`;
