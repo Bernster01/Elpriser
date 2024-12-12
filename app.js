@@ -487,7 +487,7 @@ function changeToGraph() {
     view = "graph";
     document.getElementById("graph").style.display = "block";
     document.getElementById("normal").style.display = "none";
-    document.getElementById("prices").style.maxWidth = "1200px";
+    document.getElementById("prices").style.maxWidth = "1100px";
     document.getElementById("changeView").innerText = "Ändra till lista";
     document.getElementById("legend").classList.add("noPrint");
     createGraph();
@@ -582,12 +582,26 @@ function createGraph() {
                             font: {
                                 size: 18, // Set font size for Y-axis ticks
                             }
+                        },
+                        title: {
+                            display: true,
+                            text: 'öre/kWh',
+                            font: {
+                                size: 18 // Set font size for X-axis title
+                            }
                         }
                     },
                     x: {
                         ticks: {
                             font: {
                                 size: 18, // Set font size for X-axis ticks
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tid',
+                            font: {
+                                size: 18 // Set font size for X-axis title
                             }
                         }
                     }
