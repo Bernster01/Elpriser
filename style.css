@@ -167,19 +167,23 @@ body {
     border-radius: 1rem;
 }
 .nav{
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-items: center;
     align-items: center;
     gap: 1rem;
     width: 100%;
     margin: 1rem 0;
 }
 .nav div{
-    width: 33.3%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.nav label{
+    grid-column: span 3;
 }
 .nav input{
     width: 100%;
