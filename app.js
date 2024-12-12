@@ -627,7 +627,7 @@ function createGraph() {
                     x: {
                         ticks: {
                             font: {
-                                size: 18, // Set font size for X-axis ticks
+                                size: 15, // Set font size for X-axis ticks
                             }
                         },
                         title: {
