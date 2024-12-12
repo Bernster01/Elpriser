@@ -572,36 +572,44 @@ function createGraph() {
                     data: dataValues,
                     borderColor: gradientColors,
                     borderWidth: 2,
+                    pointBackgroundColor: gradientColors,
+                    pointRadius: 5,
+                    stepped: true,
+                    pointBorderColor: "#000",
+                    tension: 0,
                     fill: true,
                     spanGaps: true, // Allow styling gaps
+                    // segment: {
+                    //     borderColor: (ctx) => {
+                    //         const { p0DataIndex, p1DataIndex } = ctx; // Access the two points defining the segment
+                    //         const value1 = dataValues[p0DataIndex];
+                    //         const value2 = dataValues[p1DataIndex];
+
+                    //         const { gradientColor1, gradientColor2 } = calculateSegmentColor(value1, value2);
+
+                    //         // Return the gradient between the two points
+                    //         const gradient = ctx.chart.ctx.createLinearGradient(
+                    //             ctx.p0.x, 0, ctx.p1.x, 0
+                    //         );
+                    //         gradient.addColorStop(0, gradientColor1);
+                    //         gradient.addColorStop(1, gradientColor2);
+                    //         return gradient;
+                    //     },
+                    //     backgroundColor: (ctx) => {
+                    //         const { p0DataIndex } = ctx;
+                    //         const value = dataValues[p0DataIndex];
+                    //         return calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor);
+                    //     }
+                    // }
                     segment: {
                         borderColor: (ctx) => {
                             const { p0DataIndex, p1DataIndex } = ctx; // Access the two points defining the segment
-                            const value1 = dataValues[p0DataIndex];
-                            const value2 = dataValues[p1DataIndex];
-
-                            const { gradientColor1, gradientColor2 } = calculateSegmentColor(value1, value2);
-
-                            // Return the gradient between the two points
-                            const gradient = ctx.chart.ctx.createLinearGradient(
-                                ctx.p0.x, 0, ctx.p1.x, 0
-                            );
-                            gradient.addColorStop(0, gradientColor1);
-                            gradient.addColorStop(1, gradientColor2);
-                            return gradient;
+                            return gradientColors[p0DataIndex];
                         },
                         backgroundColor: (ctx) => {
                             const { p0DataIndex } = ctx;
-                            const value = dataValues[p0DataIndex];
-                            return calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor);
-                        },
-                        // Data point colors
-                        pointBackgroundColor: dataValues.map(value =>
-                            calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor)
-                        ), // Gradient colors for points
-                        pointBorderColor: dataValues.map(value =>
-                            calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor)
-                        ), //
+                            return gradientColors[p0DataIndex];
+                        }
                     }
                 }]
             },
