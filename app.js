@@ -620,7 +620,7 @@ function createGraph() {
                             display: true,
                             text: 'öre/kWh',
                             font: {
-                                size: 18 // Set font size for X-axis title
+                                size: 14 // Set font size for X-axis title
                             }
                         }
                     },
@@ -634,7 +634,7 @@ function createGraph() {
                             display: true,
                             text: 'Tid',
                             font: {
-                                size: 18 // Set font size for X-axis title
+                                size: 14 // Set font size for X-axis title
                             }
                         }
                     }
