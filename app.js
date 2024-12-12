@@ -1,16 +1,17 @@
 let areaCode;
+let shouldPrint;
 function printPage() {
-    
-        const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-        //Scale page to 90% for better printing in Safari
-        if (isSafari) {
-            document.body.style.zoom = "90%";
-        }
-        window.print();
-        //Reset zoom to 100% after printing
-        if (isSafari) {
-            document.body.style.zoom = "100%";
-        }
+
+    const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+    //Scale page to 90% for better printing in Safari
+    if (isSafari) {
+        document.body.style.zoom = "90%";
+    }
+    window.print();
+    //Reset zoom to 100% after printing
+    if (isSafari) {
+        document.body.style.zoom = "100%";
+    }
 }
 async function getElectricityPrice(date) {
     try {
@@ -75,12 +76,19 @@ function getLowestPrice(electricity) {
     return lowestPrice;
 }
 async function main() {
-   
+
     //Check local storage for area code
     areaCode = localStorage.getItem("areaCode");
+    // shouldPrint = localStorage.getItem("shouldPrint");
     if (!areaCode) {
-        areaCode = prompt("Ange ditt områdesnummer (SE1, SE2, SE3, SE4) för att få korrekta priser. Områdesnummer hittar du på din elräkning.");
+        areaCode = prompt("Ange ditt elområde (SE1, SE2, SE3, SE4) för att få korrekta priser. Ditt elområde hittar du på din elräkning.");
+        console.log(areaCode);
+        if (areaCode === null) {
+            confirm("Du måste ange ett område för att kunna se elpriserna.");
+            location.reload();
+        }
         //Check if area code is valid
+        areaCode = areaCode.toUpperCase();
         if (areaCode === "SE1" || areaCode === "SE2" || areaCode === "SE3" || areaCode === "SE4") {
             localStorage.setItem("areaCode", areaCode);
         }
@@ -90,18 +98,23 @@ async function main() {
         }
 
     }
+    // if (!shouldPrint) {
+    //     shouldPrint = confirm("Vill du automatiskt skriva ut sidan när du landar på startsidan?");
+    //     localStorage.setItem("shouldPrint", shouldPrint);
+    // }
+    console.log(shouldPrint);
     let electricityPriceJson;
     //check for get request in url
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get('date');
-     //Check for what browser is used
-     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-     const isFirefox = /Firefox/.test(navigator.userAgent);
-     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-     if (!isChrome && !myParam) {
-         alert("Utskrift fungerar bäst i chrome. Du kan behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
-     }
- 
+    //Check for what browser is used
+    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+    if (!isChrome && !myParam) {
+        alert("Utskrift fungerar bäst i chrome. Du kan behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
+    }
+
     let dates
     if (myParam) {
         dates = getDate(myParam);
@@ -119,7 +132,7 @@ async function main() {
     }
     document.getElementById("previous_day").href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterdayDay}`;
     newDate = new Date(dates.year, dates.month - 1, dates.day);
-  
+
     newDate = getDate(newDate);
     const tomorrow = new Date(newDate.year, newDate.month - 1, newDate.day);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -140,7 +153,7 @@ async function main() {
         }
     } catch (error) {
         alert("Priserna finns inte tillgängliga för nästa dag. Försök igen senare.");
-        alert(error);
+        window.location.href = "index.html";
         return;
     }
 
@@ -199,9 +212,24 @@ async function main() {
     if (highestPrice > 300) {//breakpoint for high prices as butan gas is cheaper
         highest.parentElement.classList.add("danger");
     }
-
+    //Show when you can shower
+    const times = whenCanYouShower(averagePrice, monthAverage, electricity.prices);
+    //Add shower class to the times you can shower
+    const container1 = document.getElementById("left_column");
+    const container2 = document.getElementById("right_column");
+    for (let i of container1.children) {
+        console.log(i.children[0].innerText);
+        if (times.includes(i.children[0].innerText)) {
+            i.classList.add("shower");
+        }
+    }
+    for (let i of container2.children) {
+        if (times.includes(i.children[0].innerText)) {
+            i.classList.add("shower");
+        }
+    }
     //print to printer
-    if (!myParam) {
+    if (!myParam && shouldPrint === "true") {
         setTimeout(() => {
             printPage();
         }, 2000);
@@ -232,24 +260,68 @@ function appendElectricityPrice(electricity) {
 async function setBackgroundColorForPrices(low, average, high, monthAverage) {
 
     let container = document.getElementById("left_column");
+    setColor(low, average, high, monthAverage, container);
+    container = document.getElementById("right_column");
+    setColor(low, average, high, monthAverage, container);
+   
+}
+function setColor(low,average,high,monthAverage,container){
     for (let i of container.children) {
         let price = i.children[1].innerText;
         price = Number.parseFloat(price);
+        const parseRGB = (rgbString) => {
+            const match = rgbString.match(/\d+/g);
+            return match ? match.map(Number) : [0, 0, 0];
+        }
+        let startPoint = "rgb(123, 245, 123)";
+        let middlePoint = "rgb(255, 205, 112)";
+        let maxPoint = "rgb(255, 87, 87)";
+        let lowest = low;
+        let highest = high;
+        let averagePrice = average;
+        const startRGB = parseRGB(startPoint);
+        const middleRGB = parseRGB(middlePoint);
+        const maxRGB = parseRGB(maxPoint);
 
+        let gradient = (price - lowest) / (highest - lowest);
+        gradient = Math.max(0, Math.min(1, gradient)); // Clamp the gradient between 0 and 1
+
+        let color;
+        if (gradient <= 0.5) {
+            // Interpolate between start and middle
+            const localGradient = gradient / 0.5; // Scale to range [0, 1]
+            color = `rgb(
+        ${Math.round((1 - localGradient) * startRGB[0] + localGradient * middleRGB[0])},
+        ${Math.round((1 - localGradient) * startRGB[1] + localGradient * middleRGB[1])},
+        ${Math.round((1 - localGradient) * startRGB[2] + localGradient * middleRGB[2])}
+    )`;
+        } else {
+            // Interpolate between middle and max
+            const localGradient = (gradient - 0.5) / 0.5; // Scale to range [0, 1]
+            color = `rgb(
+        ${Math.round((1 - localGradient) * middleRGB[0] + localGradient * maxRGB[0])},
+        ${Math.round((1 - localGradient) * middleRGB[1] + localGradient * maxRGB[1])},
+        ${Math.round((1 - localGradient) * middleRGB[2] + localGradient * maxRGB[2])}
+    )`;
+        }
+        i.style.backgroundColor = color;
         //Set background color based on price according to what it is closest to (low, average, high)
         const diffLow = Math.abs(price - low);
         const diffAverage = Math.abs(price - average);
         const diffHigh = Math.abs(price - high);
 
+
+
+
         // Set the background color based on the closest reference value
         if (diffLow <= diffAverage && diffLow <= diffHigh) {
-            i.classList.add("low") // Low price
+            // i.classList.add("low") // Low price
             if (price === low) {
                 i.children[0].classList.add("lowest_underline");
                 i.children[1].classList.add("lowest_underline");
             }
         } else if (diffAverage < diffLow && diffAverage <= diffHigh) {
-            i.classList.add("medium")  // Average price
+            // i.classList.add("medium")  // Average price
             if (price < average) {
                 i.children[0].classList.add("low_underline");
                 i.children[1].classList.add("low_underline");
@@ -259,7 +331,7 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
                 i.children[1].classList.add("high_underline");
             }
         } else {
-            i.classList.add("high") // High price
+            // i.classList.add("high") // High price
             if (price === high) {
                 i.children[0].classList.add("highest_underline");
                 i.children[1].classList.add("highest_underline");
@@ -267,52 +339,6 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
         }
 
         if ((price * 1.1) > monthAverage) {
-            i.classList.add("above_month_average");
-        }
-        else {
-            i.classList.add("below_month_average");
-        }
-        if (price > 300) {//breakpoint for high prices as butan gas is cheaper
-            i.classList.add("danger");
-        }
-
-    }
-    container = document.getElementById("right_column");
-    for (let i of container.children) {
-        let price = i.children[1].innerText;
-        price = Number.parseFloat(price);
-
-        //Set background color based on price according to what it is closest to (low, average, high)
-        const diffLow = Math.abs(price - low);
-        const diffAverage = Math.abs(price - average);
-        const diffHigh = Math.abs(price - high);
-
-        // Set the background color based on the closest reference value
-        if (diffLow <= diffAverage && diffLow <= diffHigh) {
-            i.classList.add("low") // Low price
-            if (price === low) {
-                i.children[0].classList.add("lowest_underline");
-                i.children[1].classList.add("lowest_underline");
-            }
-        } else if (diffAverage < diffLow && diffAverage <= diffHigh) {
-            i.classList.add("medium")  // Average price
-            if (price < average) {
-                i.children[0].classList.add("low_underline");
-                i.children[1].classList.add("low_underline");
-            }
-            else {
-                i.children[0].classList.add("high_underline");
-                i.children[1].classList.add("high_underline");
-            }
-        } else {
-            i.classList.add("high") // High price
-            if (price === high) {
-                i.children[0].classList.add("highest_underline");
-                i.children[1].classList.add("highest_underline");
-            }
-        }
-
-        if ((price) > monthAverage) {
             i.classList.add("above_month_average");
         }
         else {
@@ -354,5 +380,34 @@ async function getMonthAverage(startDate) {
     } catch (error) {
         console.error("Error fetching electricity prices:", error);
     }
+}
+function whenCanYouShower(average, monthAverage, prices) {
+    const times = [];
+    for (let i in prices) {
+        const breakpoint = (average > monthAverage) ? average : monthAverage;
+        if (prices[i] <= breakpoint) {
+            //Turn index into a time 0 => 00:00, 1 => 01:00, 2 => 02:00 etc.
+            let time = Number.parseInt(i);
+            if (time < 10) {
+                time = `0${time}`;
+            }
+            times.push(`${time}:00:`);
+        }
+    }
+    const timesCold = [];
+    for (let i in prices) {
+        let breakpoint = (average > monthAverage) ? average : monthAverage;
+        breakpoint = breakpoint * 1.2;
+        if (prices[i] > breakpoint) {
+            //Turn index into a time 0 => 00:00, 1 => 01:00, 2 => 02:00 etc.
+            let time = Number.parseInt(i);
+            if (time < 10) {
+                time = `0${time}`;
+            }
+            timesCold.push(`${time}:00:`);
+        }
+    }
+    const bestTimes = [6, 18, 20];
+    return times;
 }
 main();
