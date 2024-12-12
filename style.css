@@ -176,6 +176,24 @@ body {
 }
 .nav div{
     width: 33.3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.nav input{
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    border: 3px solid rgb(255, 87, 87);
+    font-size: 1.2em;
+    text-align: center;
+    font-family: 'Delius', cursive;
+    transition: 0.3s;
+}
+.nav input:hover{
+    background-color: rgb(255, 87, 87);
+    color: white;
 }
 .nav img{
     width: 3rem;
@@ -239,7 +257,8 @@ footer a{
     text-decoration: underline;
 }
 #graph{
-    width: 100%;
+    width: 95%;
+    margin: 0 auto;
     height: 600px;
 }
 @media print {
@@ -255,9 +274,9 @@ footer a{
     .legend {
         display: flex;
     }
+
     @page {
         size: A4; /* Specify the page size */
-        margin: 1cm; /* Set margins */
       }
     
 }

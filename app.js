@@ -165,6 +165,18 @@ async function main() {
     else {
         dates = getDate();
     }
+
+    //Update the date input field
+    document.getElementById("date").value = `${dates.year}-${dates.month}-${dates.day}`;
+    document.getElementById("date").addEventListener("change", (e) => {
+        //Get the date from the input field
+        const date = new Date(e.target.value);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        //Redirect to the new date
+        window.location.href = `index.html?date=${year}-${month}-${day}`;
+    });
     const yesterday = new Date(dates.year, dates.month - 1, dates.day);
     yesterday.setDate(yesterday.getDate() - 1);
     // document.getElementById("previous_day").href = `index.html?date=${yesterday}-${yesterday.month}-${yesterday.day}`;
@@ -212,7 +224,28 @@ async function main() {
         }
         electricity.dates.push(`${hours}:00`);
     }
-    document.getElementById("date_span").innerText = `${dates.year}-${dates.month}-${dates.day} (${areaCode})`;
+    let monthString = new Intl.DateTimeFormat('sv-SE', { month: 'long' }).format(new Date(dates.year, dates.month - 1, dates.day));
+    monthString = monthString.charAt(0).toUpperCase() + monthString.slice(1);
+    let dayNumberEnding;
+    switch (dates.day) {
+        case 1:
+        case 21:
+        case 31:
+            dayNumberEnding = "a";
+            break;
+        case 2:
+        case 22:
+            dayNumberEnding = "a";
+            break;
+        case 3:
+        case 23:
+            dayNumberEnding = "e";
+            break;
+        default:
+            dayNumberEnding = "e";
+            break;
+    }
+    document.getElementById("date_span").innerText = `den  ${dates.day}:${dayNumberEnding} ${monthString} ${dates.year} (${areaCode})`;
     const highestPrice = getHighestPrice(electricity);
     const averagePrice = getAveragePrice(electricity);
     const lowestPrice = getLowestPrice(electricity);
@@ -327,7 +360,7 @@ function setColor(low, high, monthAverage, container) {
         let middlePoint = "rgb(255, 205, 112)";
         let maxPoint = "rgb(255, 87, 87)";
         let lowest = low;
-        const breakPointDanger = withTax ? 300 : 300/1.25;
+        const breakPointDanger = withTax ? 300 : 300 / 1.25;
 
         let highest = Math.min(breakPointDanger, high);
         const color = calculateGradientColor(price, lowest, highest, startPoint, middlePoint, maxPoint);
@@ -637,8 +670,8 @@ function createGraph() {
 
 
         //Set the canvas to be the same size as the container
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
+        canvas.style.width = '90%';
+        canvas.style.height = '90%';
     } catch (error) {
         // console.error(error);
     }
