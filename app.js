@@ -149,10 +149,13 @@ async function main() {
     const myParam = urlParams.get('date');
     //Check for what browser is used
     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    // const isChrome = false;
     const isFirefox = /Firefox/.test(navigator.userAgent);
     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-    if (!isChrome && !myParam) {
+    const hasSeenAbout = localStorage.getItem("hasSeenAbout");
+    if (!isChrome && !myParam && !hasSeenAbout) {
         alert("Utskrift fungerar bäst i chrome. Du kan behöva skala om sidan (till ca. 90%) i förinställningarna innan du skriver ut.");
+        localStorage.setItem("hasSeenAbout", true);
     }
 
     let dates
