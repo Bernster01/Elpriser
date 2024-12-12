@@ -207,6 +207,10 @@ header{
     padding: 2rem;
     border-bottom: 3px solid rgb(255, 166, 0);
 }
+header a{
+    color: white;
+    text-decoration: none;
+}
 main{
     min-height: 90vh;
 }
