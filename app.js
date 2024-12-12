@@ -205,8 +205,28 @@ async function main() {
             electricityPriceJson = await getElectricityPrice();
         }
     } catch (error) {
-        alert("Priserna finns inte tillgängliga för nästa dag. Försök igen senare.");
-        window.location.href = "index.html";
+        if(myParam === "redirect"){
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate());
+            window.location.href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+            return;
+
+        }
+        if(myParam){
+            window.location.href = `index.html?date=redirect`;
+            return;
+        }
+        const isPast13 = new Date(dates.year, dates.month - 1, dates.day).getHours() >= 13;
+        if (!isPast13) {
+            alert("Priserna finns inte tillgängliga för nästa dag. Försök igen senare.");
+            const yesterday = new Date(dates.year, dates.month - 1, dates.day);
+            yesterday.setDate(yesterday.getDate() - 1);
+            window.location.href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+        }
+        
+
+
+
         return;
     }
 
@@ -312,19 +332,19 @@ async function main() {
     else {
         changeToNormal();
     }
-   
+
     // Add current hour class to the current hour
     const isToday = new Date(dates.year, dates.month - 1, dates.day).toDateString() === new Date().toDateString();
     if (isToday) {
         let currentHour = new Date().getHours();
         if (Number(currentHour) >= 12) {
-            if(Number(currentHour) === 0){
+            if (Number(currentHour) === 0) {
                 currentHour = "00";
             }
             document.getElementById(currentHour + ":00").classList.add("current_hour_right");
         }
         else {
-            if(Number(currentHour) === 0){
+            if (Number(currentHour) === 0) {
                 currentHour = "00";
             }
             document.getElementById(currentHour + ":00").classList.add("current_hour_left");
@@ -563,7 +583,7 @@ function createGraph() {
     const endColor = "rgb(255, 87, 87)";
     const gradientColors = dataValues.map(value => calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor));
     const isToday = urlDate.toDateString() === new Date().toDateString();
-    const anno = isToday ?[
+    const anno = isToday ? [
         {
             type: 'line',
             // xMin: "14:00", // Current time as a label
