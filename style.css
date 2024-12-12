@@ -279,12 +279,12 @@ footer a{
     display: none !important;
 }
 .current_hour_right::before{
-    content: "<- Just nu";
+    content: "Just nu";
     background-color: rgb(0, 157, 255);
     position: absolute;
     border-radius: 1rem;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.6em;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7em;
     z-index: 100;
     right:0;
     top: 50%;
@@ -292,14 +292,14 @@ footer a{
 
 }
 .current_hour_left::before{
-    content: "Just nu ->";
+    content: "Just nu";
     background-color: rgb(0, 157, 255);
     position: absolute;
     border-radius: 1rem;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     z-index: 100;
     left:0;
-    font-size: 0.6em;
+    font-size: 0.7em;
     top: 50%;
     transform: translateY(-50%) translateX(-110%);
 
