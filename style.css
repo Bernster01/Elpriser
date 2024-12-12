@@ -231,8 +231,18 @@ header{
     background-color: rgb(0, 0, 0);
     color: white;
     margin-top: 0;
-    padding: 2rem;
     border-bottom: 3px solid rgb(255, 166, 0);
+}
+header div{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+header img{
+    width: 10em;
+    height: 10em;
 }
 header a{
     color: white;
