@@ -19,7 +19,9 @@ body {
     align-items: center;
     max-width: 470px;
 }
-
+.prices h2{
+    margin: 1rem 0;
+}
 .top {
     display: flex;
     justify-content: center;
