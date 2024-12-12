@@ -40,6 +40,9 @@ body {
     padding: 0.25rem;
     border-radius: 1rem;
 }
+#graph{
+    display: none;
+}
 #electricity_prices {
     display: flex;
     flex-wrap: wrap;
@@ -235,6 +238,10 @@ footer a{
     color: white;
     text-decoration: underline;
 }
+#graph{
+    width: 100%;
+    height: 600px;
+}
 @media print {
     head {
         display: none;
@@ -242,7 +249,7 @@ footer a{
 
     .noPrint,
     br {
-        display: none;
+        display: none !important;
     }
 
     .legend {

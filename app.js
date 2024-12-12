@@ -1,5 +1,8 @@
 let areaCode;
 let shouldPrint;
+let withTax = true;
+let view = "normal";
+let elData;
 function printPage() {
 
     const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
@@ -75,11 +78,31 @@ function getLowestPrice(electricity) {
     const lowestPrice = Math.min(...prices);
     return lowestPrice;
 }
+function changeTax() {
+    withTax = !withTax;
+    localStorage.setItem("withTax", withTax);
+    switch (withTax) {
+        case true:
+            document.getElementById("changeTax").innerText = "Visa utan moms";
+            document.getElementById("taxHeading").innerText = "inkl. moms";
+            break;
+        case false:
+            document.getElementById("changeTax").innerText = "Visa med moms";
+            document.getElementById("taxHeading").innerText = "exkl. moms"
+            break;
+    }
+    location.reload();
+}
 async function main() {
 
     //Check local storage for area code
     areaCode = localStorage.getItem("areaCode");
-    // shouldPrint = localStorage.getItem("shouldPrint");
+    shouldTax = localStorage.getItem("withTax");
+    let view = localStorage.getItem("view");
+    if (!view) {
+        view = "normal";
+        localStorage.setItem("view", view);
+    }
     if (!areaCode) {
         areaCode = prompt("Ange ditt elområde (SE1, SE2, SE3, SE4) för att få korrekta priser. Ditt elområde hittar du på din elräkning.");
         console.log(areaCode);
@@ -96,13 +119,33 @@ async function main() {
             alert("Områdesnumret är inte giltigt. Försök igen.");
             location.reload();
         }
-
     }
-    // if (!shouldPrint) {
-    //     shouldPrint = confirm("Vill du automatiskt skriva ut sidan när du landar på startsidan?");
-    //     localStorage.setItem("shouldPrint", shouldPrint);
-    // }
-    console.log(shouldPrint);
+
+    if (shouldTax !== null && shouldTax !== undefined) {
+        if (shouldTax === "true") {
+            withTax = true;
+        }
+        else {
+            withTax = false;
+        }
+        switch (withTax) {
+            case true:
+                document.getElementById("changeTax").innerText = "Visa utan moms";
+                document.getElementById("taxHeading").innerText = "inkl. moms";
+
+                break;
+            case false:
+                document.getElementById("changeTax").innerText = "Visa med moms";
+                document.getElementById("taxHeading").innerText = "exkl. moms"
+                break;
+        }
+    }
+    else {
+        console.log("no tax");
+        shouldTax = true;
+        localStorage.setItem("withTax", shouldTax);
+    }
+    console.log(withTax);
     let electricityPriceJson;
     //check for get request in url
     const urlParams = new URLSearchParams(window.location.search);
@@ -159,7 +202,8 @@ async function main() {
 
     let electricity = { dates: [], prices: [] };
     for (let i of electricityPriceJson) {
-        electricity.prices.push(Math.round(Number.parseFloat(i.SEK_per_kWh * 1.25 * 100) * 100) / 100);
+        const tax = withTax ? 1.25 : 1;
+        electricity.prices.push(Math.round(Number.parseFloat(i.SEK_per_kWh * tax * 100) * 100) / 100);
         let date = new Date(i.time_start);
         let hours = date.getHours();
         let minutes = date.getMinutes();
@@ -180,9 +224,9 @@ async function main() {
     const aDate = new Date(dates.year, dates.month - 1, dates.day);
     const monthAverage = await getMonthAverage(aDate);
     const startMonthDate = new Date(dates.year, dates.month - 1, 1);
-    const today = new Date();
+    const today = new Date(dates.year, dates.month - 1, dates.day);
     document.getElementById("time_range").innerText = `${startMonthDate.getMonth() + 1}/${startMonthDate.getDate()} - ${today.getMonth() + 1}/${today.getDate()}`;
-    document.getElementById("month_average").innerText = monthAverage.toFixed(2) + " öre/kWh";	
+    document.getElementById("month_average").innerText = monthAverage.toFixed(2) + " öre/kWh";
     setBackgroundColorForPrices(lowestPrice, averagePrice, highestPrice, monthAverage);
     const lowest = document.getElementById("lowest")
     const average = document.getElementById("average")
@@ -230,6 +274,14 @@ async function main() {
             i.classList.add("shower");
         }
     }
+    elData = electricity;
+
+    if (view === "graph") {
+        changeToGraph();
+    }
+    else {
+        changeToNormal();
+    }
     //print to printer
     if (!myParam && shouldPrint === "true") {
         setTimeout(() => {
@@ -262,50 +314,23 @@ function appendElectricityPrice(electricity) {
 async function setBackgroundColorForPrices(low, average, high, monthAverage) {
 
     let container = document.getElementById("left_column");
-    setColor(low, average, high, monthAverage, container);
+    setColor(low, high, monthAverage, container);
     container = document.getElementById("right_column");
-    setColor(low, average, high, monthAverage, container);
-   
+    setColor(low, high, monthAverage, container);
+
 }
-function setColor(low,average,high,monthAverage,container){
+function setColor(low, high, monthAverage, container) {
     for (let i of container.children) {
         let price = i.children[1].innerText;
         price = Number.parseFloat(price);
-        const parseRGB = (rgbString) => {
-            const match = rgbString.match(/\d+/g);
-            return match ? match.map(Number) : [0, 0, 0];
-        }
         let startPoint = "rgb(123, 245, 123)";
         let middlePoint = "rgb(255, 205, 112)";
         let maxPoint = "rgb(255, 87, 87)";
         let lowest = low;
-        let highest = high;
-        let averagePrice = average;
-        const startRGB = parseRGB(startPoint);
-        const middleRGB = parseRGB(middlePoint);
-        const maxRGB = parseRGB(maxPoint);
+        const breakPointDanger = withTax ? 300 : 300/1.25;
 
-        let gradient = (price - lowest) / (highest - lowest);
-        gradient = Math.max(0, Math.min(1, gradient)); // Clamp the gradient between 0 and 1
-
-        let color;
-        if (gradient <= 0.25) {
-            // Interpolate between start and middle
-            const localGradient = gradient / 0.5; // Scale to range [0, 1]
-            color = `rgb(
-        ${Math.round((1 - localGradient) * startRGB[0] + localGradient * middleRGB[0])},
-        ${Math.round((1 - localGradient) * startRGB[1] + localGradient * middleRGB[1])},
-        ${Math.round((1 - localGradient) * startRGB[2] + localGradient * middleRGB[2])}
-    )`;
-        } else {
-            // Interpolate between middle and max
-            const localGradient = (gradient - 0.5) / 0.5; // Scale to range [0, 1]
-            color = `rgb(
-        ${Math.round((1 - localGradient) * middleRGB[0] + localGradient * maxRGB[0])},
-        ${Math.round((1 - localGradient) * middleRGB[1] + localGradient * maxRGB[1])},
-        ${Math.round((1 - localGradient) * middleRGB[2] + localGradient * maxRGB[2])}
-    )`;
-        }
+        let highest = Math.min(breakPointDanger, high);
+        const color = calculateGradientColor(price, lowest, highest, startPoint, middlePoint, maxPoint);
         i.style.backgroundColor = color;
         //Set background color based on price according to what it is closest to (low, average, high)
         const diffLow = Math.abs(price - low);
@@ -346,11 +371,44 @@ function setColor(low,average,high,monthAverage,container){
         else {
             i.classList.add("below_month_average");
         }
-        if (price > 300) {//breakpoint for high prices as butan gas is cheaper
+        if (price > breakPointDanger) {//breakpoint for high prices as butan gas is cheaper
             i.classList.add("danger");
         }
 
     }
+}
+function calculateGradientColor(value, min, max, startColor, middleColor, endColor) {
+
+    const parseRGB = (rgbString) => {
+        const match = rgbString.match(/\d+/g);
+        return match ? match.map(Number) : [0, 0, 0];
+    }
+    const startRGB = parseRGB(startColor);
+    const middleRGB = parseRGB(middleColor);
+    const maxRGB = parseRGB(endColor);
+
+    let gradient = (value - min) / (max - min);
+    gradient = Math.max(0, Math.min(1, gradient)); // Clamp the gradient between 0 and 1
+
+    let color;
+    if (gradient <= 0.5) {
+        // Interpolate between start and middle
+        const localGradient = gradient / 0.5; // Scale to range [0, 1]
+        color = `rgb(
+    ${Math.round((1 - localGradient) * startRGB[0] + localGradient * middleRGB[0])},
+    ${Math.round((1 - localGradient) * startRGB[1] + localGradient * middleRGB[1])},
+    ${Math.round((1 - localGradient) * startRGB[2] + localGradient * middleRGB[2])}
+)`;
+    } else {
+        // Interpolate between middle and max
+        const localGradient = (gradient - 0.5) / 0.5; // Scale to range [0, 1]
+        color = `rgb(
+    ${Math.round((1 - localGradient) * middleRGB[0] + localGradient * maxRGB[0])},
+    ${Math.round((1 - localGradient) * middleRGB[1] + localGradient * maxRGB[1])},
+    ${Math.round((1 - localGradient) * middleRGB[2] + localGradient * maxRGB[2])}
+)`;
+    }
+    return color;
 }
 async function getMonthAverage(startDate) {
     const date = startDate ? new Date(startDate) : new Date();
@@ -368,7 +426,8 @@ async function getMonthAverage(startDate) {
                     return response.json();
                 })
                 .then(data => {
-                    const prices = data.map(price => price.SEK_per_kWh * 1.25 * 100); // Convert to SEK/kWh and add VAT
+                    const tax = withTax ? 1.25 : 1;
+                    const prices = data.map(price => price.SEK_per_kWh * tax * 100); // Convert to SEK/kWh and add VAT
                     return prices.reduce((sum, price) => sum + price, 0) / prices.length; // Calculate average
                 });
         });
@@ -412,4 +471,163 @@ function whenCanYouShower(average, monthAverage, prices) {
     const bestTimes = [6, 18, 20];
     return times;
 }
+
+
+
+
+function changeView() {
+    if (view === "normal") {
+        changeToGraph();
+    }
+    else {
+        changeToNormal();
+    }
+}
+function changeToGraph() {
+    view = "graph";
+    document.getElementById("graph").style.display = "block";
+    document.getElementById("normal").style.display = "none";
+    document.getElementById("prices").style.maxWidth = "1200px";
+    document.getElementById("changeView").innerText = "Ändra till lista";
+    document.getElementById("legend").classList.add("noPrint");
+    createGraph();
+    localStorage.setItem("view", view);
+}
+function changeToNormal() {
+    view = "normal";
+    document.getElementById("graph").style.display = "none";
+    document.getElementById("normal").style.display = "block";
+
+    document.getElementById("changeView").innerText = "Ändra till graf";
+    document.getElementById("prices").style.maxWidth = "470px";
+
+    document.getElementById("legend").classList.remove("noPrint");
+    localStorage.setItem("view", view);
+}
+function createGraph() {
+    const canvas = document.getElementById("electricity_chart");
+    const ctx = canvas.getContext("2d");
+    let graphData = { labels: [], datasets: [] };
+    //With chart.js
+    const dataValues = elData.prices;
+    const lowest = Math.min(...dataValues);
+    let highest = Math.max(...dataValues);
+    highest = Math.min(300, highest);
+    const startColor = "rgb(123, 245, 123)";
+    const middleColor = "rgb(255, 205, 112)";
+    const endColor = "rgb(255, 87, 87)";
+    const gradientColors = dataValues.map(value => calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor));
+
+    // const lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    // dataValues.forEach((_, index) => {
+    //     const stopPosition = index / (dataValues.length - 1); // Calculate stop position (0 to 1)
+    //     lineGradient.addColorStop(Math.min(stopPosition,1), gradientColors[index]);
+    // });
+
+    // Define the custom plugin
+    const calculateSegmentColor = (value1, value2) => {
+        const gradientColor1 = calculateGradientColor(value1, lowest, highest, startColor, middleColor, endColor);
+        const gradientColor2 = calculateGradientColor(value2, lowest, highest, startColor, middleColor, endColor);
+        return { gradientColor1, gradientColor2 };
+    };
+    try {
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [...elData.dates],
+                datasets: [{
+                    data: dataValues,
+                    borderColor: gradientColors,
+                    borderWidth: 2,
+                    fill: true,
+                    spanGaps: true, // Allow styling gaps
+                    segment: {
+                        borderColor: (ctx) => {
+                            const { p0DataIndex, p1DataIndex } = ctx; // Access the two points defining the segment
+                            const value1 = dataValues[p0DataIndex];
+                            const value2 = dataValues[p1DataIndex];
+
+                            const { gradientColor1, gradientColor2 } = calculateSegmentColor(value1, value2);
+
+                            // Return the gradient between the two points
+                            const gradient = ctx.chart.ctx.createLinearGradient(
+                                ctx.p0.x, 0, ctx.p1.x, 0
+                            );
+                            gradient.addColorStop(0, gradientColor1);
+                            gradient.addColorStop(1, gradientColor2);
+                            return gradient;
+                        },
+                        backgroundColor: (ctx) => {
+                            const { p0DataIndex } = ctx;
+                            const value = dataValues[p0DataIndex];
+                            return calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor);
+                        },
+                        // Data point colors
+                        pointBackgroundColor: dataValues.map(value =>
+                            calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor)
+                        ), // Gradient colors for points
+                        pointBorderColor: dataValues.map(value =>
+                            calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor)
+                        ), //
+                    }
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 18, // Set font size for Y-axis ticks
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 18, // Set font size for X-axis ticks
+                            }
+                        }
+                    }
+                },
+
+                plugins: {
+                    legend: {
+                        display: false, // Hide legend completely
+                        labels: {
+                            font: {
+                                size: 18 // Set font size for legend (if visible)
+                            }
+                        }
+                    },
+                    tooltip: {
+                        titleFont: {
+                            size: 18 // Set tooltip title font size
+                        },
+                        bodyFont: {
+                            size: 16 // Set tooltip body font size
+                        },
+                        displayColors: false, // Hide color boxes in tooltip
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const value = tooltipItem.raw; // Get the value of the hovered data point
+                                return value + " " + "öre/kWh"; // Append the custom string to the value
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+        //Set the canvas to be the same size as the container
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+    } catch (error) {
+        // console.error(error);
+    }
+}
+
 main();

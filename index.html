@@ -11,38 +11,43 @@
     <header class="noPrint">
         <h1><a href="index.html">Elpriset</a></h1>
     </header>
-    <main class="prices">
-        <h2>Elpris för <span id="date_span"></span> inkl. moms</h2>
-        <div class="top">
-            <div>
-                <p>Lägsta</p>
-                <p class="big low"><span id="lowest"></span> öre</p>
-            </div>
-            <div>
-                <p>Genomsnitt</p>
-                <p class="big medium"><span id="average"></span> öre</p>
-            </div>
-            <div>
-                <p>Högsta</p>
-                <p class="big high"><span id="highest"></span> öre</p>
-            </div>
-        </div>
-        <div id="electricity_prices">
-            <div id="left_column"></div>
-            <div id="middle_column">
-                <div id="month_average_container">
-                    <p>
-                        Månads-genomsnittet
-                    </p>
-                    <p span id="time_range">
-
-                    </p>
-                    <p id="month_average">
-
-                    </p>
+    <main class="prices" id="prices">
+        <h2>Elpris för <span id="date_span"></span> <span id="taxHeading">inkl. moms</span></h2>
+        <div id="normal">
+            <div class="top">
+                <div>
+                    <p>Lägsta</p>
+                    <p class="big low"><span id="lowest"></span> öre</p>
+                </div>
+                <div>
+                    <p>Genomsnitt</p>
+                    <p class="big medium"><span id="average"></span> öre</p>
+                </div>
+                <div>
+                    <p>Högsta</p>
+                    <p class="big high"><span id="highest"></span> öre</p>
                 </div>
             </div>
-            <div id="right_column"></div>
+            <div id="electricity_prices">
+                <div id="left_column"></div>
+                <div id="middle_column">
+                    <div id="month_average_container">
+                        <p>
+                            Månads-genomsnittet
+                        </p>
+                        <p span id="time_range">
+
+                        </p>
+                        <p id="month_average">
+
+                        </p>
+                    </div>
+                </div>
+                <div id="right_column"></div>
+            </div>
+        </div>
+        <div id="graph">
+            <canvas id="electricity_chart" width="400" height="400"></canvas>
         </div>
         <div class="nav">
             <a id="previous_day" class="noPrint" href="">
@@ -52,10 +57,15 @@
                 <img src="r.svg" alt="arrow"></a>
         </div><br>
         <button id="print" class="noPrint button" onclick="printPage()">Skriv ut</button><br>
-        <button class="noPrint button" onclick="changeAreaCode()">Byt elområde</button>
+        <div class="settings noPrint">
+            <h3>Inställningar</h3>
+            <button class="noPrint button" onclick="changeAreaCode()">Byt elområde</button>
+            <button id="changeView" class="noPrint button" onclick="changeView()">Ändra till graf</button>
+            <button id="changeTax" class="noPrint button" onclick="changeTax()">Ändra till exkl. moms</button>
+        </div>
     </main>
     <aside>
-        <div class="legend">
+        <div class="legend" id="legend">
             <h2>Förklaringar</h2>
             <div class="legend-item">
                 <div class="low border_radius">
@@ -113,13 +123,20 @@
         <p>Elpriset hämtas från <a href="https://www.elprisetjustnu.se">elprisetjustnu.nu</a>
         </p>
         <p id="copyright">
-            © <script>
+            ©
+            <script>
                 document.write(new Date().getFullYear());
             </script>
             Casper Berneklint
         </p>
+        <p>
+            Graferna är skapade med <a href="https://www.chartjs.org">Chart.js</a>
+        </p>
     </footer>
 </body>
-<script src="app.js"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js
+"></script>
+<script defer src="app.js"></script>
 
 </html>
