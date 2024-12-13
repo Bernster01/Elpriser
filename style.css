@@ -232,17 +232,25 @@ header{
     color: white;
     margin-top: 0;
     border-bottom: 3px solid rgb(255, 166, 0);
+    
 }
 header div{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
     align-items: center;
+    justify-items: center;
     gap: 1rem;
+    height: 5rem;
+    position: relative;
 }
 header img{
-    width: 10em;
-    height: 10em;
+    width: 100%;
+    max-width: 100px;
+    min-width: 75px;
+    height: 90%;
+    object-fit: contain;
+    
 }
 header a{
     color: white;
