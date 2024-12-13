@@ -1,8 +1,8 @@
 {
-    "version":"4.1.1",
+    "version":"2.0.0",
     "description":"A website that takes the prices of swedish electricity and displays them in a table and graph. The site is made to print to pdf and printer.",
     "full_description":"A website that takes the prices of swedish electricity and displays them in a table and graph. The site is made to print to pdf and printer.",
-    "name": "Ascii - video player",
+    "name": "Elprisbladet",
     "image": "https://bernster01.github.io/Elpriser/logo/png/logo-no-background.png",
     "video": "",
     "site": "https://bernster01.github.io/Elpriser/"
