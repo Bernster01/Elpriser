@@ -228,7 +228,7 @@ header{
     gap: 1rem;
     width: 100%;
     margin: 1rem 0;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(53, 53, 53);
     color: white;
     margin-top: 0;
     border-bottom: 3px solid rgb(255, 166, 0);
@@ -268,7 +268,7 @@ footer{
     width: 100%;
     margin: 1rem 0;
     margin-bottom: 0;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(53, 53, 53);
     color: white;
     padding: 2rem;
     border-top: 3px solid rgb(255, 166, 0);
