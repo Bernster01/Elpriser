@@ -337,18 +337,20 @@ async function main() {
     }
 
     // Add current hour class to the current hour
+    
     const isToday = new Date(dates.year, dates.month - 1, dates.day).toDateString() === new Date().toDateString();
+   
     if (isToday) {
         let currentHour = new Date().getHours();
         if (Number(currentHour) >= 12) {
-            if (Number(currentHour) === 0) {
-                currentHour = "00";
+            if (currentHour < 10) {
+                currentHour = `0${currentHour}`;
             }
             document.getElementById(currentHour + ":00").classList.add("current_hour_right");
         }
         else {
-            if (Number(currentHour) === 0) {
-                currentHour = "00";
+            if (currentHour < 10) {
+                currentHour = `0${currentHour}`;
             }
             document.getElementById(currentHour + ":00").classList.add("current_hour_left");
         }
