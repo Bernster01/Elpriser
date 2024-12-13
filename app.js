@@ -447,7 +447,17 @@ function setColor(low, high, monthAverage, container) {
     }
 }
 function calculateGradientColor(value, min, max, startColor, middleColor, endColor) {
-
+    let breakpoint = 0.5
+    if(max <40 && max > 10){
+        middleColor = "rgb(217, 255, 112)";
+        endColor = "rgb(241, 255, 87)";
+        breakpoint = 0.8;
+    }
+    else if(max <= 10){
+        middleColor = "rgb(85, 255, 80)";
+        endColor = "rgb(111, 239, 72)";
+        breakpoint = 0.8;
+    }
     const parseRGB = (rgbString) => {
         const match = rgbString.match(/\d+/g);
         return match ? match.map(Number) : [0, 0, 0];
@@ -460,7 +470,7 @@ function calculateGradientColor(value, min, max, startColor, middleColor, endCol
     gradient = Math.max(0, Math.min(1, gradient)); // Clamp the gradient between 0 and 1
 
     let color;
-    if (gradient <= 0.5) {
+    if (gradient <= breakpoint) {
         // Interpolate between start and middle
         const localGradient = gradient / 0.5; // Scale to range [0, 1]
         color = `rgb(
