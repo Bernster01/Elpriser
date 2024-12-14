@@ -402,37 +402,46 @@ function setColor(low, high, monthAverage, container) {
         const color = calculateGradientColor(price, lowest, highest, startPoint, middlePoint, maxPoint);
         i.style.backgroundColor = color;
         //Set background color based on price according to what it is closest to (low, average, high)
-        const diffLow = Math.abs(price - low);
-        const diffAverage = Math.abs(price - average);
-        const diffHigh = Math.abs(price - high);
+        // const diffLow = Math.abs(price - low);
+        // const diffAverage = Math.abs(price - average);
+        // const diffHigh = Math.abs(price - high);
 
+        if(price === low){
+            i.children[0].classList.add("lowest_underline");
+            i.children[1].classList.add("lowest_underline");
+        }
+        if(price === high){
+            i.children[0].classList.add("highest_underline");
+            i.children[1].classList.add("highest_underline");
+        }
 
-
+        // if (diffLow <= diffAverage && diffLow <= diffHigh) {
+        //     // i.classList.add("low") // Low price
+        //     if (price === low) {
+        //         i.children[0].classList.add("lowest_underline");
+        //         i.children[1].classList.add("lowest_underline");
+        //     }
+        // } else if (diffAverage < diffLow && diffAverage <= diffHigh) {
+        //     // i.classList.add("medium")  // Average price
+        //     if (price < average) {
+        //         i.children[0].classList.add("low_underline");
+        //         i.children[1].classList.add("low_underline");
+        //     }
+        //     else {
+        //         i.children[0].classList.add("high_underline");
+        //         i.children[1].classList.add("high_underline");
+        //     }
+        // } else {
+        //     // i.classList.add("high") // High price
+        //     if (price === high) {
+        //         i.children[0].classList.add("highest_underline");
+        //         i.children[1].classList.add("highest_underline");
+        //     }
+        // }
+      
 
         // Set the background color based on the closest reference value
-        if (diffLow <= diffAverage && diffLow <= diffHigh) {
-            // i.classList.add("low") // Low price
-            if (price === low) {
-                i.children[0].classList.add("lowest_underline");
-                i.children[1].classList.add("lowest_underline");
-            }
-        } else if (diffAverage < diffLow && diffAverage <= diffHigh) {
-            // i.classList.add("medium")  // Average price
-            if (price < average) {
-                i.children[0].classList.add("low_underline");
-                i.children[1].classList.add("low_underline");
-            }
-            else {
-                i.children[0].classList.add("high_underline");
-                i.children[1].classList.add("high_underline");
-            }
-        } else {
-            // i.classList.add("high") // High price
-            if (price === high) {
-                i.children[0].classList.add("highest_underline");
-                i.children[1].classList.add("highest_underline");
-            }
-        }
+        
 
         if ((price * 1.1) > monthAverage) {
             i.classList.add("above_month_average");
@@ -454,7 +463,7 @@ function calculateGradientColor(value, min, max, startColor, middleColor, endCol
     if(max <40 && max > 10){
         middleColor = "rgb(217, 255, 112)";
         endColor = "rgb(241, 255, 87)";
-        breakpoint = 0.8;
+        breakpoint = 0.6;
     }
     if(max <= 10){
         middleColor = "rgb(85, 255, 80)";
