@@ -389,9 +389,16 @@ async function setBackgroundColorForPrices(low, average, high, monthAverage) {
 
 }
 function setColor(low, high, monthAverage, container) {
+    if(!withTax){
+        high = high * 1.25;
+        low = low * 1.25;
+    }
     for (let i of container.children) {
         let price = i.children[1].innerText;
         price = Number.parseFloat(price);
+        if(!withTax){
+            price = price * 1.25;
+        }
         let startPoint = "rgb(123, 245, 123)";
         let middlePoint = "rgb(255, 205, 112)";
         let maxPoint = "rgb(255, 87, 87)";
