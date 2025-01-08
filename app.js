@@ -185,7 +185,11 @@ async function main() {
     if (yesterdayDay < 10) {
         yesterdayDay = `0${yesterdayDay}`;
     }
-    document.getElementById("previous_day").href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterdayDay}`;
+    let yesterdayMonth = yesterday.getMonth() + 1;
+    if (yesterdayMonth < 10) {
+        yesterdayMonth = `0${yesterdayMonth}`;
+    }
+    document.getElementById("previous_day").href = `index.html?date=${yesterday.getFullYear()}-${yesterdayMonth}-${yesterdayDay}`;
     newDate = new Date(dates.year, dates.month - 1, dates.day);
 
     newDate = getDate(newDate);
@@ -198,7 +202,11 @@ async function main() {
         tomorrowDay = `0${tomorrowDay}`;
     }
     // document.getElementById("next_day").href = `index.html?date=${tomorrow}-${tomorrow.month}-${tomorrow.day}`;
-    document.getElementById("next_day").href = `index.html?date=${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrowDay}`;
+    let nextMonth = tomorrow.getMonth() + 1;
+    if (nextMonth < 10) {
+        nextMonth = `0${nextMonth}`;
+    }
+    document.getElementById("next_day").href = `index.html?date=${tomorrow.getFullYear()}-${nextMonth}-${tomorrowDay}`;
     try {
         if (myParam) {
             electricityPriceJson = await getElectricityPrice(myParam);
