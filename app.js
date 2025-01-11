@@ -38,7 +38,7 @@ function getDate(useDate) {
         date = new Date(useDate);
     } else {
         date = new Date();
-        date.setDate(date.getDate() + 1);
+    // date.setDate(date.getDate() + 1);
     }
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
