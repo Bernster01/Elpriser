@@ -234,16 +234,18 @@ async function main() {
             if(month < 10){
                 month = `0${month}`;
             }
+            const isPast13 = new Date(dates.year, dates.month - 1, dates.day).getHours() >= 13;
+            const daySeek = new Date(dates.year, dates.month - 1, dates.day);
+            const seekWeekdayName = new Intl.DateTimeFormat('sv-SE', { weekday: 'long' }).format(daySeek);
+            const seekMonthName = new Intl.DateTimeFormat('sv-SE', { month: 'long' }).format(daySeek);
+            if (!isPast13) {
+            alert(`Priserna finns inte tillgängliga för ${seekWeekdayName} den ${daySeek.getDate()} ${seekMonthName}. Försök igen senare.`);
+            window.location.href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+        }
+        
             window.location.href = `index.html?date=${yesterday.getFullYear()}-${month}-${yesterday.getDate()}`;
             return;
 
-        }
-        const isPast13 = new Date(dates.year, dates.month - 1, dates.day).getHours() >= 13;
-        if (!isPast13) {
-            alert("Priserna finns inte tillgängliga för nästa dag. Försök igen senare.");
-            const yesterday = new Date(dates.year, dates.month - 1, dates.day);
-            yesterday.setDate(yesterday.getDate() - 1);
-            window.location.href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
         }
         
 
