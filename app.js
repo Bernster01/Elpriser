@@ -240,10 +240,10 @@ async function main() {
             const seekMonthName = new Intl.DateTimeFormat('sv-SE', { month: 'long' }).format(daySeek);
             if (!isPast13) {
             alert(`Priserna finns inte tillgängliga för ${seekWeekdayName} den ${daySeek.getDate()} ${seekMonthName}. Försök igen senare.`);
-            window.location.href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+            window.location.href = `index.html`;
         }
         
-            window.location.href = `index.html?date=${yesterday.getFullYear()}-${month}-${yesterday.getDate()}`;
+            window.location.href = `index.html`;
             return;
 
         }
@@ -387,11 +387,13 @@ function appendElectricityPrice(electricity) {
         //Set id to time
         div.id = electricity.dates[i];
         const time = document.createElement("span");
+        
         const price = document.createElement("span");
-        time.innerText = electricity.dates[i] + ": ";
-        price.innerText = electricity.prices[i] + " öre";
+        time.innerText = `${electricity.dates[i]} ${electricity.prices[i] + " öre"}`;
+        time.dataset.time = electricity.dates[i];
+        time.dataset.price = electricity.prices[i];
         div.appendChild(time);
-        div.appendChild(price);
+        // div.appendChild(price);
         if (counter < 12) {
             container1.appendChild(div);
         }
@@ -415,7 +417,7 @@ function setColor(low, high, monthAverage, container) {
         low = low * 1.25;
     }
     for (let i of container.children) {
-        let price = i.children[1].innerText;
+        let price = i.children[0].dataset.price;
         price = Number.parseFloat(price);
         if(!withTax){
             price = price * 1.25;
@@ -436,11 +438,9 @@ function setColor(low, high, monthAverage, container) {
 
         if(price === low){
             i.children[0].classList.add("lowest_underline");
-            i.children[1].classList.add("lowest_underline");
         }
         if(price === high){
             i.children[0].classList.add("highest_underline");
-            i.children[1].classList.add("highest_underline");
         }
 
         // if (diffLow <= diffAverage && diffLow <= diffHigh) {
