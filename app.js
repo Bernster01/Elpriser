@@ -622,9 +622,27 @@ function createGraph() {
     const startColor = "rgb(123, 245, 123)";
     const middleColor = "rgb(255, 205, 112)";
     const endColor = "rgb(255, 87, 87)";
+    let currentHour = new Date().getHours();
+    let toHour = currentHour + 1;
+    if(toHour < 10){
+        toHour = `0${toHour}`;
+    }
+    if(currentHour < 10){
+        currentHour = `0${currentHour}`;
+    }
     const gradientColors = dataValues.map(value => calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor));
     const isToday = urlDate.toDateString() === new Date().toDateString();
     const anno = isToday ? [
+        
+        {
+            type: 'line',
+            // xMin: "14:00", // Current time as a label
+            // xMax: "14:00",
+            xMin: new Date().getHours()+1,
+            xMax: new Date().getHours()+1,
+            borderColor: 'black',  // Line color
+            borderWidth: 3,
+        },
         {
             type: 'line',
             // xMin: "14:00", // Current time as a label
@@ -635,18 +653,18 @@ function createGraph() {
             borderWidth: 3,
             label: {
                 display: true,
-                content: 'Nuvarande timme', // Title text for the annotation
+                content: `Nuvarande timme (${currentHour}-${toHour})`, // Title text for the annotation
                 position: 'start', // Position of the label ('start', 'center', or 'end')
-                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color for the label
+                backgroundColor: 'rgba(0, 0, 0, 0.75)', // Background color for the label
                 color: 'white', // Text color
                 font: {
-                    size: 12, // Font size for the label
+                    size: 14, // Font size for the label
                     weight: 'bold' // Font weight for the label
                 },
                 padding: 5 // Padding around the label
 
             }
-        }
+        },
     ] : [];
     try {
         const myChart = new Chart(ctx, {
