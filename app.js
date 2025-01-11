@@ -643,6 +643,8 @@ function createGraph() {
     if(currentHour < 10){
         currentHour = `0${currentHour}`;
     }
+    const avg = Math.round((elData.prices.reduce((a, b) => a + b, 0) / elData.prices.length)*100)/100;
+
     const gradientColors = dataValues.map(value => calculateGradientColor(value, lowest, highest, startColor, middleColor, endColor));
     const isToday = urlDate.toDateString() === new Date().toDateString();
     const anno = isToday ? [
@@ -678,7 +680,50 @@ function createGraph() {
 
             }
         },
-    ] : [];
+        { // Add annotation for average price as a dashed line
+            type: 'line',
+            yMin: avg,
+            yMax: avg,
+            borderColor: 'black',  // Line color
+            borderWidth: 3,
+            borderDash: [10, 20], // Make the line dashed
+            label: {
+                display: true,
+                content: `Genomsnittspris (${avg} öre/Kwh)`, // Title text for the annotation
+                position: 'center', // Position of the label ('start', 'center', or 'end')
+                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color for the label
+                color: 'white', // Text color
+                font: {
+                    size: 14, // Font size for the label
+                    weight: 'bold' // Font weight for the label
+                },
+                padding: 5 // Padding around the label
+
+            }
+        },
+    ] : [ { // Add annotation for average price as a dashed line
+        type: 'line',
+        yMin: avg,
+        yMax: avg,
+        borderColor: 'black',  // Line color
+        borderWidth: 3,
+        borderDash: [10, 20], // Make the line dashed
+        label: {
+            display: true,
+            content: `Genomsnittspris (${avg} öre/Kwh)`, // Title text for the annotation
+            position: 'start', // Position of the label top and center
+            
+
+            backgroundColor: 'rgba(0, 0, 0, 0.7)', // Background color for the label
+            color: 'white', // Text color
+            font: {
+                size: 10, // Font size for the label
+                weight: 'bold' // Font weight for the label
+            },
+            padding: 5 // Padding around the label
+
+        }
+    },];
     try {
         const myChart = new Chart(ctx, {
             type: 'line',
@@ -836,6 +881,27 @@ function createGraph() {
                                 size: 14 // Set font size for X-axis title
                             }
                         }
+                    }
+                },
+                annotation:  { // Add annotation for average price as a dashed line
+                    type: 'line',
+                    yMin: avg,
+                    yMax: avg,
+                    borderColor: 'black',  // Line color
+                    borderWidth: 3,
+                    borderDash: [10, 20], // Make the line dashed
+                    label: {
+                        display: true,
+                        content: `Genomsnittspris (${avg} öre/Kwh)`, // Title text for the annotation
+                        position: 'center', // Position of the label ('start', 'center', or 'end')
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color for the label
+                        color: 'white', // Text color
+                        font: {
+                            size: 14, // Font size for the label
+                            weight: 'bold' // Font weight for the label
+                        },
+                        padding: 5 // Padding around the label
+        
                     }
                 },
 
