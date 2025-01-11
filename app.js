@@ -219,13 +219,24 @@ async function main() {
         if(myParam === "redirect"){
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate());
-            window.location.href = `index.html?date=${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+            let month = yesterday.getMonth() + 1;
+            if(month < 10){
+                month = `0${month}`;
+            }
+            window.location.href = `index.html?date=${yesterday.getFullYear()}-${month}-${yesterday.getDate()}`;
             return;
 
         }
         if(myParam){
-            window.location.href = `index.html?date=redirect`;
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate());
+            let month = yesterday.getMonth() + 1;
+            if(month < 10){
+                month = `0${month}`;
+            }
+            window.location.href = `index.html?date=${yesterday.getFullYear()}-${month}-${yesterday.getDate()}`;
             return;
+
         }
         const isPast13 = new Date(dates.year, dates.month - 1, dates.day).getHours() >= 13;
         if (!isPast13) {
