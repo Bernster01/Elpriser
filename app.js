@@ -691,7 +691,7 @@ function createGraph() {
                 display: true,
                 content: `Genomsnittspris (${avg} öre/Kwh)`, // Title text for the annotation
                 position: 'start', // Position of the label ('start', 'center', or 'end')
-                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background color for the label
+                backgroundColor: 'rgba(0, 0, 0, 0.75)', // Background color for the label
                 color: 'white', // Text color
                 font: {
                     size: 10, // Font size for the label
@@ -714,7 +714,7 @@ function createGraph() {
             position: 'start', // Position of the label top and center
             
 
-            backgroundColor: 'rgba(0, 0, 0, 0.7)', // Background color for the label
+            backgroundColor: 'rgba(0, 0, 0, 0.75)', // Background color for the label
             color: 'white', // Text color
             font: {
                 size: 10, // Font size for the label
